@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CaP-X: Benchmarking Coding Agents for Robot Manipulation</title>
+  <meta name="description" content="CaP-X: A Framework for Benchmarking and Improving Coding Agents for Robot Manipulation">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ====== Navigation Bar ====== -->
+  <nav class="navbar">
+    <span class="nav-brand" id="nav-brand">CaP-X</span>
+
+    <div class="nav-links">
+      <a href="#home" class="nav-link">Home</a>
+      <a href="#" class="nav-link" data-link="arxiv">arXiv</a>
+      <a href="#" class="nav-link" data-link="code">Code</a>
+      <a href="#" class="nav-link highlighted" data-link="playground">Playground</a>
+    </div>
+
+    <span class="nav-team" id="nav-team"></span>
+  </nav>
+
+  <!-- ====== Hero Section ====== -->
+  <section class="hero" id="home">
+    <h1 class="hero-title" id="paper-title"></h1>
+
+    <div class="authors-list" id="authors-list"></div>
+    <p class="equal-note" id="equal-note"></p>
+    <div class="affiliations-list" id="affiliations-list"></div>
+    <div class="institution-logos" id="institution-logos"></div>
+
+    <div class="hero-buttons">
+      <a href="#" class="btn btn-primary" data-link="arxiv">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Paper
+      </a>
+      <a href="#" class="btn btn-outline" data-link="code">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Code
+      </a>
+      <a href="#" class="btn btn-primary" data-link="playground">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        Playground
+      </a>
+    </div>
+  </section>
+
+  <!-- ====== AI Progress on CaP-X ====== -->
+  <section class="section-full chart-section" id="progress">
+    <div class="chart-container" style="padding: 0 2rem;">
+      <div class="chart-header fade-in">
+        <h2 class="section-title">AI Progress on CaP-X</h2>
+        <p class="section-subtitle" style="margin: 0 auto;">Overall success rate of frontier models on CaP-X benchmark tasks over time. Hover over models for detailed per-task performance.</p>
+      </div>
+
+      <div id="timeline-chart" class="scale-in" style="position: relative;">
+        <div id="timeline-tooltip" class="chart-tooltip"></div>
+      </div>
+
+      <div class="chart-legend fade-in">
+        <div class="legend-item">
+          <div class="legend-circle"></div>
+          <span>Closed Source</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-circle dashed"></div>
+          <span>Open Source</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-line"></div>
+          <span>SOTA Frontier</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-line human"></div>
+          <span>Human Baseline</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== CTA — Playground ====== -->
+  <section class="section" id="playground-cta">
+    <div class="cta-section">
+      <div class="cta-content fade-in">
+        <h2>Try the Interactive Playground</h2>
+        <p>
+          Interact with LLM coding agents in a real-time simulator. Write prompts, observe how agents
+          generate manipulation code, and see robots execute tasks — all in your browser.
+        </p>
+        <a href="#" class="btn btn-primary" data-link="playground">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Launch Playground
+        </a>
+      </div>
+      <div class="cta-placeholder fade-in">
+        Playground preview coming soon
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== Introduction ====== -->
+  <section class="section-full intro-section" id="introduction">
+    <div class="intro-content" style="padding: 0 2rem;">
+      <h2 class="intro-title fade-in">Benchmarking LM Agents on<br>Embodied Intelligence Tasks</h2>
+
+      <div class="intro-text fade-in">
+        <p>
+          CaP-X provides the first comprehensive benchmark for evaluating how well large language model agents
+          can write code to control robots. Spanning 7 manipulation tasks across multiple difficulty levels,
+          CaP-X tests both language-only and vision-language models on their ability to generate executable
+          robot control policies from natural language instructions.
+        </p>
+        <p>
+          Our benchmark bridges simulation and reality: every task is designed for seamless transfer to
+          real-world robotic hardware, enabling direct evaluation of LLM-generated code on physical robots
+          without further fine-tuning.
+        </p>
+      </div>
+
+      <div class="feature-pills">
+        <span class="feature-pill">7 Manipulation Tasks</span>
+        <span class="feature-pill">12+ Frontier Models</span>
+        <span class="feature-pill">Sim-to-Real Transfer</span>
+        <span class="feature-pill">Multi-Turn Evaluation</span>
+        <span class="feature-pill">Visual Feedback</span>
+        <span class="feature-pill">Code Generation</span>
+        <span class="feature-pill">Open Source</span>
+      </div>
+
+      <!-- Video Gallery -->
+      <h3 class="section-title fade-in" style="text-align:center; font-size:1.5rem; margin-bottom:1.5rem;">Results Gallery</h3>
+      <div class="video-gallery">
+        <div class="video-placeholder">
+          <span class="icon">&#9654;</span>
+          <span class="label">Cube Lift — Sim</span>
+        </div>
+        <div class="video-placeholder">
+          <span class="icon">&#9654;</span>
+          <span class="label">Cube Stack — Sim</span>
+        </div>
+        <div class="video-placeholder">
+          <span class="icon">&#9654;</span>
+          <span class="label">Spill Wipe — Sim</span>
+        </div>
+        <div class="video-placeholder">
+          <span class="icon">&#9654;</span>
+          <span class="label">Peg Insert — Sim</span>
+        </div>
+        <div class="video-placeholder">
+          <span class="icon">&#9654;</span>
+          <span class="label">Real Robot — Cube Lift</span>
+        </div>
+        <div class="video-placeholder">
+          <span class="icon">&#9654;</span>
+          <span class="label">Real Robot — Stack</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== Highlights ====== -->
+  <section class="section" id="highlights">
+    <div class="highlights-section">
+      <h2 class="section-title fade-in" style="text-align:center; margin-bottom:3rem;">Key Findings</h2>
+
+      <!-- Highlight 1 -->
+      <div class="highlight-card">
+        <div class="highlight-text">
+          <div class="highlight-number">1</div>
+          <h3 class="highlight-title">Frontier models achieve non-zero success on today's robotics benchmarks</h3>
+          <p class="highlight-desc">
+            Large language and vision-language models can directly generate executable robot manipulation code
+            with meaningful success rates across multiple tasks — without any task-specific training or fine-tuning.
+            The best model achieves over 30% average success rate across all tasks.
+          </p>
+        </div>
+        <div class="highlight-figure" id="highlight-fig-1">
+          <span class="highlight-figure-placeholder">Loading chart...</span>
+        </div>
+      </div>
+
+      <!-- Highlight 2 -->
+      <div class="highlight-card">
+        <div class="highlight-text">
+          <div class="highlight-number">2</div>
+          <h3 class="highlight-title">VLM Agents zero-shot on manipulation tasks where specialized VLAs cannot</h3>
+          <p class="highlight-desc">
+            Vision-language model agents, using only natural language prompts and visual feedback, can solve
+            manipulation tasks that state-of-the-art vision-language-action models (e.g., Pi 0.5) fail on entirely.
+            This highlights the surprising generality of code-generation approaches over end-to-end learned policies.
+          </p>
+        </div>
+        <div class="highlight-figure" id="highlight-fig-2">
+          <span class="highlight-figure-placeholder">Figure coming soon — VLM vs VLA comparison</span>
+        </div>
+      </div>
+
+      <!-- Highlight 3 -->
+      <div class="highlight-card">
+        <div class="highlight-text">
+          <div class="highlight-number">3</div>
+          <h3 class="highlight-title">Post-training makes VLM agents better at robotics tasks</h3>
+          <p class="highlight-desc">
+            Models that undergo additional post-training (e.g., RLHF, instruction tuning) show consistent improvements
+            in their ability to generate correct robot manipulation code. This suggests that general reasoning improvements
+            directly transfer to embodied task performance.
+          </p>
+        </div>
+        <div class="highlight-figure" id="highlight-fig-3">
+          <span class="highlight-figure-placeholder">Figure coming soon — Post-training comparison</span>
+        </div>
+      </div>
+
+      <!-- Highlight 4 -->
+      <div class="highlight-card">
+        <div class="highlight-text">
+          <div class="highlight-number">4</div>
+          <h3 class="highlight-title">Smaller models catch up when only abstract reasoning is needed</h3>
+          <p class="highlight-desc">
+            While larger models dominate on complex manipulation tasks, the performance gap narrows significantly
+            on tasks that primarily require abstract reasoning rather than low-level control. This indicates that
+            model scale is most critical for fine-grained physical reasoning.
+          </p>
+        </div>
+        <div class="highlight-figure" id="highlight-fig-4">
+          <span class="highlight-figure-placeholder">Loading chart...</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== Footer ====== -->
+  <footer class="footer">
+    <p>CaP-X Benchmark &copy; 2025</p>
+  </footer>
+
+  <!-- ====== Scripts ====== -->
+  <!-- D3.js -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- App scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
