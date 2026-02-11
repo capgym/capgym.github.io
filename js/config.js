@@ -8,6 +8,10 @@ const SITE_CONFIG = {
   // Paper metadata
   paperTitle: "CaP-X: A Framework for Benchmarking and Improving Coding Agents for Robot Manipulation",
 
+  // Hero tagline (eye-catching, playful)
+  heroTagline: "Agents' First Physical Exam",
+  heroTaglinePrefix: "CaP-X:",
+
   // Team branding (nav bar right side)
   teamName: "NVIDIA GEAR Team",
 
@@ -47,12 +51,12 @@ const SITE_CONFIG = {
     4: "CMU",
   },
 
-  // Institution logo config (text placeholders for now)
+  // Institution logos
   institutionLogos: [
-    { name: "NVIDIA", id: 1 },
-    { name: "UC Berkeley", id: 2 },
-    { name: "Stanford", id: 3 },
-    { name: "CMU", id: 4 },
+    { name: "NVIDIA", id: 1, src: "assets/institution_logos/nvidia.png" },
+    { name: "UC Berkeley", id: 2, src: "assets/institution_logos/uc_berkeley.png" },
+    { name: "Stanford", id: 3, src: "assets/institution_logos/stanford.png" },
+    { name: "CMU", id: 4, src: "assets/institution_logos/cmu.png" },
   ],
 };
 

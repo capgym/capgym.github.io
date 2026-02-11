@@ -22,7 +22,7 @@
 
     <div class="nav-links">
       <a href="#home" class="nav-link">Home</a>
-      <a href="#" class="nav-link" data-link="arxiv">arXiv</a>
+      <a href="#" class="nav-link" data-link="arxiv">Paper</a>
       <a href="#" class="nav-link" data-link="code">Code</a>
       <a href="#" class="nav-link highlighted" data-link="playground">Playground</a>
     </div>
@@ -30,17 +30,12 @@
     <span class="nav-team" id="nav-team"></span>
   </nav>
 
-  <!-- ====== Hero Section ====== -->
+  <!-- ====== Hero Section (above the fold) ====== -->
   <section class="hero" id="home">
-    <h1 class="hero-title" id="paper-title"></h1>
-
-    <div class="authors-list" id="authors-list"></div>
-    <p class="equal-note" id="equal-note"></p>
-    <div class="affiliations-list" id="affiliations-list"></div>
-    <div class="institution-logos" id="institution-logos"></div>
+    <h1 class="hero-tagline" id="hero-tagline"></h1>
 
     <div class="hero-buttons">
-      <a href="#" class="btn btn-primary" data-link="arxiv">
+      <a href="#" class="btn btn-outline" data-link="arxiv">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Paper
       </a>
@@ -53,21 +48,19 @@
         Playground
       </a>
     </div>
+
+    <div class="institution-logos" id="institution-logos"></div>
   </section>
 
-  <!-- ====== AI Progress on CaP-X ====== -->
+  <!-- ====== AI Progress on CaP-X (splash figure, still above the fold) ====== -->
   <section class="section-full chart-section" id="progress">
     <div class="chart-container" style="padding: 0 2rem;">
-      <div class="chart-header fade-in">
-        <h2 class="section-title">AI Progress on CaP-X</h2>
-        <p class="section-subtitle" style="margin: 0 auto;">Overall success rate of frontier models on CaP-X benchmark tasks over time. Hover over models for detailed per-task performance.</p>
-      </div>
-
-      <div id="timeline-chart" class="scale-in" style="position: relative;">
+      <div style="position: relative;">
+        <div id="timeline-chart"></div>
         <div id="timeline-tooltip" class="chart-tooltip"></div>
       </div>
 
-      <div class="chart-legend fade-in">
+      <div class="chart-legend">
         <div class="legend-item">
           <div class="legend-circle"></div>
           <span>Closed Source</span>
@@ -86,6 +79,15 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- ====== Paper Details (second screen) ====== -->
+  <section class="section paper-details-section" id="paper-details">
+    <h2 class="paper-details-title fade-in" id="paper-title"></h2>
+
+    <div class="authors-list fade-in" id="authors-list"></div>
+    <p class="equal-note fade-in" id="equal-note"></p>
+    <div class="affiliations-list fade-in" id="affiliations-list"></div>
   </section>
 
   <!-- ====== CTA — Playground ====== -->
@@ -116,23 +118,17 @@
       <div class="intro-text fade-in">
         <p>
           CaP-X provides the first comprehensive benchmark for evaluating how well large language model agents
-          can write code to control robots. Spanning 7 manipulation tasks across multiple difficulty levels,
-          CaP-X tests both language-only and vision-language models on their ability to generate executable
-          robot control policies from natural language instructions.
-        </p>
-        <p>
-          Our benchmark bridges simulation and reality: every task is designed for seamless transfer to
-          real-world robotic hardware, enabling direct evaluation of LLM-generated code on physical robots
-          without further fine-tuning.
+          can write code to control robots. Integrated with hundreds of manipulation tasks across multiple
+          robot learning benchmarks (LIBERO-PRO, Robosuite, BEHAVIOR), CaP-X tests both LLM and VLM models on their
+          ability to generate executable robot control policies from natural language instructions.
         </p>
       </div>
 
       <div class="feature-pills">
-        <span class="feature-pill">7 Manipulation Tasks</span>
+        <span class="feature-pill">100+ Manipulation Tasks</span>
         <span class="feature-pill">12+ Frontier Models</span>
         <span class="feature-pill">Sim-to-Real Transfer</span>
         <span class="feature-pill">Multi-Turn Evaluation</span>
-        <span class="feature-pill">Visual Feedback</span>
         <span class="feature-pill">Code Generation</span>
         <span class="feature-pill">Open Source</span>
       </div>

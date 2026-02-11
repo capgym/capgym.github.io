@@ -20,9 +20,16 @@ async function initTimelineChart() {
   const tooltip = document.getElementById("timeline-tooltip");
 
   // Dimensions
-  const margin = { top: 30, right: 50, bottom: 50, left: 60 };
+  const margin = { top: 20, right: 50, bottom: 40, left: 60 };
   const width = container.clientWidth - margin.left - margin.right;
-  const height = 380 - margin.top - margin.bottom;
+
+  // Calculate chart height to fill remaining viewport below the chart container,
+  // leaving space for legend (~40px) and section bottom padding (~24px)
+  const chartTop = container.getBoundingClientRect().top;
+  const reserveBelow = 80; // legend + padding
+  const availableHeight = window.innerHeight - chartTop - reserveBelow;
+  const chartHeight = Math.max(Math.min(availableHeight, 500), 250);
+  const height = chartHeight - margin.top - margin.bottom;
 
   const svg = d3.select(container)
     .append("svg")
@@ -32,20 +39,38 @@ async function initTimelineChart() {
   const g = svg.append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
+  // Define defs early (needed for hatch patterns and clip paths)
+  const defs = svg.append("defs");
+
   // Parse dates
   const models = data.models.map(m => ({
     ...m,
     date: new Date(m.releaseDate),
   }));
 
-  // Scales
+  // Piecewise X scale: compress sparse early period, expand dense later period
+  // Sep 2024 - Jul 2025 (sparse, 2 models) → 20% of width
+  // Jul 2025 - Feb 2026 (dense, 10 models) → 80% of width
   const xMin = new Date("2024-08-01");
-  const xMax = new Date("2026-02-01");
-  const x = d3.scaleTime()
-    .domain([xMin, xMax])
-    .range([0, width]);
+  const xBreak = new Date("2025-07-01");
+  const xMax = new Date("2026-01-15");
+  const xBreakPct = 0.20;
 
-  const yMax = Math.max(data.humanBaseline, d3.max(models, d => d.avgSuccessRate)) * 1.15;
+  function x(date) {
+    const t = date.getTime();
+    if (t <= xBreak.getTime()) {
+      const pct = (t - xMin.getTime()) / (xBreak.getTime() - xMin.getTime());
+      return pct * xBreakPct * width;
+    } else {
+      const pct = (t - xBreak.getTime()) / (xMax.getTime() - xBreak.getTime());
+      return (xBreakPct + pct * (1 - xBreakPct)) * width;
+    }
+  }
+  x.domain = () => [xMin, xMax];
+
+  // Y scale: cap at model range, human baseline shown as off-scale annotation
+  const modelMax = d3.max(models, d => d.avgSuccessRate);
+  const yMax = Math.ceil(modelMax / 5) * 5 + 10; // round up + padding
   const y = d3.scaleLinear()
     .domain([0, yMax])
     .range([height, 0]);
@@ -54,74 +79,170 @@ async function initTimelineChart() {
   g.append("g")
     .attr("class", "grid-lines")
     .selectAll("line")
-    .data(y.ticks(6))
+    .data(y.ticks(5))
     .enter()
     .append("line")
     .attr("x1", 0)
     .attr("x2", width)
     .attr("y1", d => y(d))
     .attr("y2", d => y(d))
-    .attr("stroke", "#e8eaed")
+    .attr("stroke", "#e5e5e5")
     .attr("stroke-width", 0.5);
 
-  // X axis
-  const xAxis = d3.axisBottom(x)
-    .ticks(d3.timeMonth.every(2))
-    .tickFormat(d => {
-      const month = d3.timeFormat("%b")(d);
-      if (d.getMonth() === 0) return `${month}\n${d.getFullYear()}`;
-      if (d.getMonth() === 8 && d.getFullYear() === 2024) return `${month}\n${d.getFullYear()}`;
-      return month;
-    });
+  // X axis — manual ticks for piecewise scale
+  const xTickDates = [
+    new Date("2024-09-01"), new Date("2025-01-01"),
+    new Date("2025-04-01"), new Date("2025-07-01"),
+    new Date("2025-08-01"), new Date("2025-09-01"),
+    new Date("2025-10-01"), new Date("2025-11-01"),
+    new Date("2025-12-01"), new Date("2026-01-01"),
+  ];
 
-  g.append("g")
-    .attr("transform", `translate(0,${height})`)
-    .call(xAxis)
-    .call(g => g.select(".domain").attr("stroke", "#d0d4da"))
-    .call(g => g.selectAll(".tick line").attr("stroke", "#d0d4da"))
-    .call(g => g.selectAll(".tick text").attr("fill", "#8888a0").attr("font-size", "11px"));
+  const xAxisG = g.append("g")
+    .attr("transform", `translate(0,${height})`);
+
+  // Axis line
+  xAxisG.append("line")
+    .attr("x1", 0).attr("x2", width)
+    .attr("stroke", "#e5e5e5");
+
+  // Year divider lines
+  [new Date("2025-01-01"), new Date("2026-01-01")].forEach(d => {
+    const tx = x(d);
+    if (tx <= 0 || tx >= width) return;
+
+    // Vertical line through full chart
+    g.append("line")
+      .attr("x1", tx).attr("x2", tx)
+      .attr("y1", 0).attr("y2", height)
+      .attr("stroke", "#ccc")
+      .attr("stroke-width", 1)
+      .attr("stroke-dasharray", "4,3");
+
+    // Year label below axis
+    xAxisG.append("text")
+      .attr("x", tx).attr("y", 34)
+      .attr("text-anchor", "middle")
+      .attr("fill", "#000").attr("font-size", "12px")
+      .attr("font-weight", "700")
+      .text(d.getFullYear());
+  });
+
+  // Ticks
+  xTickDates.forEach(d => {
+    const tx = x(d);
+    if (tx < 0 || tx > width) return;
+    const month = d3.timeFormat("%b")(d);
+    const label = month;
+
+    xAxisG.append("line")
+      .attr("x1", tx).attr("x2", tx)
+      .attr("y1", 0).attr("y2", 5)
+      .attr("stroke", "#e5e5e5");
+
+    xAxisG.append("text")
+      .attr("x", tx).attr("y", 20)
+      .attr("text-anchor", "middle")
+      .attr("fill", "#666").attr("font-size", "12px")
+      .text(label);
+  });
 
   // Y axis
   const yAxis = d3.axisLeft(y)
-    .ticks(6)
+    .ticks(5)
     .tickFormat(d => d + "%");
 
   g.append("g")
     .call(yAxis)
-    .call(g => g.select(".domain").attr("stroke", "#d0d4da"))
-    .call(g => g.selectAll(".tick line").attr("stroke", "#d0d4da"))
-    .call(g => g.selectAll(".tick text").attr("fill", "#8888a0").attr("font-size", "11px"));
+    .call(g => g.select(".domain").attr("stroke", "#e5e5e5"))
+    .call(g => g.selectAll(".tick line").attr("stroke", "#e5e5e5"))
+    .call(g => g.selectAll(".tick text").attr("fill", "#666").attr("font-size", "12px"));
 
   // Y axis label
   g.append("text")
     .attr("transform", "rotate(-90)")
-    .attr("y", -45)
+    .attr("y", -42)
     .attr("x", -height / 2)
     .attr("text-anchor", "middle")
-    .attr("fill", "#4a4a6a")
-    .attr("font-size", "12px")
+    .attr("fill", "#666")
+    .attr("font-size", "13px")
     .attr("font-weight", "600")
-    .text("Task Success Rate (%)");
+    .text("Avg. Success Rate (%)");
 
-  // Human baseline
+  // Human baseline — off-scale annotation with prominent axis break
+  const breakZoneTop = 4;
+  const breakZoneBottom = 30;
+  const breakZoneMid = (breakZoneTop + breakZoneBottom) / 2;
+
+  // Diagonal hatch pattern for break zone
+  const hatchId = "axis-break-hatch";
+  defs.append("pattern")
+    .attr("id", hatchId)
+    .attr("patternUnits", "userSpaceOnUse")
+    .attr("width", 8).attr("height", 8)
+    .append("path")
+    .attr("d", "M0,8 L8,0")
+    .attr("stroke", "#ccc")
+    .attr("stroke-width", 1);
+
+  // Break zone background
+  g.append("rect")
+    .attr("x", 0).attr("y", breakZoneTop)
+    .attr("width", width).attr("height", breakZoneBottom - breakZoneTop)
+    .attr("fill", `url(#${hatchId})`);
+
+  // Break zone borders (wavy lines)
+  function wavyPath(yPos, w) {
+    let d = `M0,${yPos}`;
+    const step = 10;
+    const amp = 3;
+    for (let px = 0; px < w; px += step) {
+      d += ` l${step / 2},${-amp} l${step / 2},${amp}`;
+    }
+    return d;
+  }
+  g.append("path").attr("d", wavyPath(breakZoneTop, width))
+    .attr("fill", "none").attr("stroke", "#999").attr("stroke-width", 1.5);
+  g.append("path").attr("d", wavyPath(breakZoneBottom, width))
+    .attr("fill", "none").attr("stroke", "#999").attr("stroke-width", 1.5);
+
+  // Human baseline dashed line inside break zone
   g.append("line")
-    .attr("x1", 0)
-    .attr("x2", width)
-    .attr("y1", y(data.humanBaseline))
-    .attr("y2", y(data.humanBaseline))
+    .attr("x1", 0).attr("x2", width)
+    .attr("y1", breakZoneMid).attr("y2", breakZoneMid)
     .attr("stroke", "#C0392B")
     .attr("stroke-width", 2)
     .attr("stroke-dasharray", "8,4")
-    .attr("opacity", 0.6);
+    .attr("opacity", 0.7);
 
-  g.append("text")
-    .attr("x", width - 5)
-    .attr("y", y(data.humanBaseline) - 8)
-    .attr("text-anchor", "end")
+  // Human baseline label with background
+  const labelText = `Human Baseline: ${data.humanBaseline.toFixed(1)}%`;
+  const labelX = width - 8;
+  const labelFontSize = 13;
+
+  // Background rect
+  const labelBg = g.append("rect")
     .attr("fill", "#C0392B")
-    .attr("font-size", "11px")
+    .attr("rx", 0);
+
+  const labelEl = g.append("text")
+    .attr("x", labelX)
+    .attr("y", breakZoneMid)
+    .attr("text-anchor", "end")
+    .attr("dominant-baseline", "central")
+    .attr("fill", "#fff")
+    .attr("font-size", `${labelFontSize}px`)
     .attr("font-weight", "700")
-    .text(`Human (${data.humanBaseline.toFixed(1)}%)`);
+    .attr("letter-spacing", "0.02em")
+    .text(labelText);
+
+  // Size background to text
+  const bbox = labelEl.node().getBBox();
+  labelBg
+    .attr("x", bbox.x - 6)
+    .attr("y", bbox.y - 3)
+    .attr("width", bbox.width + 12)
+    .attr("height", bbox.height + 6);
 
   // Compute SOTA frontier
   const sortedByDate = [...models].sort((a, b) => a.date - b.date);
@@ -167,11 +288,9 @@ async function initTimelineChart() {
 
   // Draw model points
   const LOGO_SIZE = 28;
-  const NON_SOTA_ALPHA = 0.45;
+  const NON_SOTA_ALPHA = 0.75;
 
   // Define clip paths for circular logos
-  const defs = svg.append("defs");
-
   models.forEach((m, i) => {
     defs.append("clipPath")
       .attr("id", `clip-${i}`)
@@ -188,7 +307,7 @@ async function initTimelineChart() {
   function drawModel(m, i, isSota) {
     const cx = x(m.date);
     const cy = y(m.avgSuccessRate);
-    const color = isSota ? (data.companyColors[m.company] || "#666") : "#C0C0C0";
+    const color = data.companyColors[m.company] || "#666";
     const size = isSota ? LOGO_SIZE + 4 : LOGO_SIZE;
     const strokeWidth = isSota ? 2.5 : 1.5;
     const alpha = isSota ? 1 : NON_SOTA_ALPHA;
@@ -232,7 +351,7 @@ async function initTimelineChart() {
       .attr("y", labelY)
       .attr("text-anchor", "middle")
       .attr("fill", color)
-      .attr("font-size", isSota ? "11px" : "9px")
+      .attr("font-size", isSota ? "13px" : "11px")
       .attr("font-weight", isSota ? "700" : "500")
       .text(m.displayName);
 
@@ -301,7 +420,8 @@ function showTooltip(event, model, data, tooltip) {
 
 function moveTooltip(event, tooltip, container) {
   if (!tooltip || !container) return;
-  const rect = container.getBoundingClientRect();
+  const wrapper = container.parentElement;
+  const rect = wrapper.getBoundingClientRect();
   let left = event.clientX - rect.left + 16;
   let top = event.clientY - rect.top - 10;
 
@@ -387,7 +507,7 @@ async function initHighlightFigure1() {
     .attr("x", d => x0(d.displayName) + x0.bandwidth() / 2)
     .attr("y", d => y(d.avgSuccessRate) - 5)
     .attr("text-anchor", "middle")
-    .attr("font-size", "10px")
+    .attr("font-size", "12px")
     .attr("font-weight", "600")
     .attr("fill", "#4a4a6a")
     .text(d => d.avgSuccessRate.toFixed(1) + "%");
@@ -400,7 +520,7 @@ async function initHighlightFigure1() {
     .call(g => g.selectAll(".tick line").remove())
     .call(g => g.selectAll(".tick text")
       .attr("fill", "#4a4a6a")
-      .attr("font-size", "10px")
+      .attr("font-size", "12px")
       .attr("transform", "rotate(-25)")
       .attr("text-anchor", "end"));
 
@@ -409,7 +529,7 @@ async function initHighlightFigure1() {
     .call(d3.axisLeft(y).ticks(4).tickFormat(d => d + "%"))
     .call(g => g.select(".domain").remove())
     .call(g => g.selectAll(".tick line").remove())
-    .call(g => g.selectAll(".tick text").attr("fill", "#8888a0").attr("font-size", "10px"));
+    .call(g => g.selectAll(".tick text").attr("fill", "#8888a0").attr("font-size", "12px"));
 }
 
 /* ==========================================
@@ -487,7 +607,7 @@ async function initHighlightFigure2() {
     .attr("x", d => x(d.size))
     .attr("y", d => y(d.avgSuccessRate) - 10)
     .attr("text-anchor", "middle")
-    .attr("font-size", "8px")
+    .attr("font-size", "13px")
     .attr("fill", "#4a4a6a")
     .text(d => d.displayName);
 
@@ -496,14 +616,14 @@ async function initHighlightFigure2() {
     .attr("transform", `translate(0,${height})`)
     .call(d3.axisBottom(x).ticks(4, "~s").tickFormat(d => d >= 1000 ? (d/1000) + "T" : d + "B"))
     .call(g => g.select(".domain").attr("stroke", "#d0d4da"))
-    .call(g => g.selectAll(".tick text").attr("fill", "#8888a0").attr("font-size", "10px"));
+    .call(g => g.selectAll(".tick text").attr("fill", "#8888a0").attr("font-size", "12px"));
 
   g.append("text")
     .attr("x", width / 2)
     .attr("y", height + 35)
     .attr("text-anchor", "middle")
     .attr("fill", "#4a4a6a")
-    .attr("font-size", "11px")
+    .attr("font-size", "13px")
     .text("Model Size (approx. params)");
 
   // Y axis
@@ -511,7 +631,7 @@ async function initHighlightFigure2() {
     .call(d3.axisLeft(y).ticks(4).tickFormat(d => d + "%"))
     .call(g => g.select(".domain").remove())
     .call(g => g.selectAll(".tick line").remove())
-    .call(g => g.selectAll(".tick text").attr("fill", "#8888a0").attr("font-size", "10px"));
+    .call(g => g.selectAll(".tick text").attr("fill", "#8888a0").attr("font-size", "12px"));
 }
 
 /* ==========================================

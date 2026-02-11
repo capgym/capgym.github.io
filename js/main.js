@@ -3,11 +3,25 @@
  * GSAP animations, scroll behavior, dynamic content injection
  */
 
+// Prevent browser scroll restoration
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+window.scrollTo(0, 0);
+
 document.addEventListener("DOMContentLoaded", () => {
+  window.scrollTo(0, 0);
   injectDynamicContent();
   initNavbar();
   initAnimations();
   initAllCharts();
+});
+
+window.addEventListener("load", () => {
+  if (window.location.hash) {
+    history.replaceState(null, "", window.location.pathname);
+  }
+  window.scrollTo(0, 0);
 });
 
 /* ==========================================
@@ -17,7 +31,13 @@ document.addEventListener("DOMContentLoaded", () => {
 function injectDynamicContent() {
   const cfg = SITE_CONFIG;
 
-  // Paper title
+  // Hero tagline (eye-catching)
+  const taglineEl = document.getElementById("hero-tagline");
+  if (taglineEl) {
+    taglineEl.innerHTML = `<span class="accent">${cfg.heroTaglinePrefix}</span> ${cfg.heroTagline}`;
+  }
+
+  // Paper title (in paper-details section)
   const titleEl = document.getElementById("paper-title");
   if (titleEl) {
     // Split "CaP-X:" as accent
@@ -68,11 +88,11 @@ function injectDynamicContent() {
       .join("\n");
   }
 
-  // Institution logos (text placeholders)
+  // Institution logos
   const logosEl = document.getElementById("institution-logos");
   if (logosEl) {
     logosEl.innerHTML = cfg.institutionLogos
-      .map(l => `<span class="institution-logo">${l.name}</span>`)
+      .map(l => `<img class="institution-logo" src="${l.src}" alt="${l.name}" title="${l.name}">`)
       .join("\n");
   }
 }
@@ -168,12 +188,9 @@ function initAnimations() {
   // Hero entrance animation
   const heroTl = gsap.timeline({ delay: 0.2 });
   heroTl
-    .fromTo("#paper-title", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" })
-    .fromTo("#authors-list", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.4")
-    .fromTo("#equal-note", { opacity: 0 }, { opacity: 1, duration: 0.4 }, "-=0.2")
-    .fromTo("#affiliations-list", { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.2")
-    .fromTo("#institution-logos", { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.2")
-    .fromTo(".hero-buttons", { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.2");
+    .from("#hero-tagline", { opacity: 0, y: 30, duration: 0.8, ease: "power3.out" })
+    .from(".hero-buttons", { opacity: 0, y: 15, duration: 0.5, ease: "power2.out" }, "-=0.3")
+    .from("#institution-logos", { opacity: 0, y: 15, duration: 0.5, ease: "power2.out" }, "-=0.2");
 
   // Highlight cards staggered entrance
   gsap.utils.toArray(".highlight-card").forEach((card, i) => {

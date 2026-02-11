@@ -1,7 +1,16 @@
 /* ============================================
    CaP-X Website Styles
-   Light theme + NVIDIA green (#76b900)
+   NVIDIA design language: sharp edges, flat,
+   white/black/green, geometric typography
    ============================================ */
+
+/* --- NVIDIA Sans Font --- */
+@font-face {
+  font-family: 'NVIDIA Sans';
+  src: url('../font/NVIDIASansVF_NALA_W_Wght.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
 
 /* --- CSS Custom Properties --- */
 :root {
@@ -9,36 +18,25 @@
   --nvidia-green-dark: #5a8f00;
   --nvidia-green-light: #8fd100;
   --nvidia-green-bg: rgba(118, 185, 0, 0.08);
-  --nvidia-green-bg-hover: rgba(118, 185, 0, 0.15);
 
   --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-tertiary: #f0f2f5;
+  --bg-secondary: #f7f7f7;
+  --bg-dark: #1a1a1a;
+  --bg-black: #000000;
 
-  --text-primary: #1a1a2e;
-  --text-secondary: #4a4a6a;
-  --text-muted: #8888a0;
+  --text-primary: #000000;
+  --text-secondary: #666666;
+  --text-muted: #999999;
 
-  --border-light: #e8eaed;
-  --border-medium: #d0d4da;
-
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
-
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
+  --border-light: #e5e5e5;
 
   --transition-fast: 0.2s ease;
   --transition-normal: 0.3s ease;
 
   --max-width: 1200px;
-  --nav-height: 64px;
+  --nav-height: 56px;
 
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-sans: 'NVIDIA Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* --- Reset & Base --- */
@@ -64,7 +62,7 @@ body {
 }
 
 a {
-  color: var(--nvidia-green-dark);
+  color: var(--text-primary);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
@@ -84,89 +82,113 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  padding: 0 2.5rem;
+  background: var(--bg-primary);
   border-bottom: 1px solid var(--border-light);
-  transition: background var(--transition-normal), box-shadow var(--transition-normal);
+  transition: box-shadow var(--transition-normal);
 }
 
 .navbar.scrolled {
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
 .nav-brand {
-  font-size: 1.25rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .nav-link {
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.875rem;
-  font-weight: 500;
+  padding: 0.45rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   transition: all var(--transition-fast);
+  position: relative;
+  border: 1.5px solid transparent;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: var(--nvidia-green);
+  transition: width 0.3s ease;
 }
 
 .nav-link:hover {
   color: var(--text-primary);
-  background: var(--bg-secondary);
+  border-color: var(--text-primary);
+  background: none;
+}
+
+.nav-link:hover::after {
+  width: 100%;
 }
 
 .nav-link.highlighted {
   background: var(--nvidia-green);
-  color: #fff;
-  font-weight: 600;
+  color: var(--text-primary);
+  font-weight: 700;
+  padding: 0.45rem 1.25rem;
+}
+
+.nav-link.highlighted::after {
+  display: none;
 }
 
 .nav-link.highlighted:hover {
   background: var(--nvidia-green-dark);
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .nav-team {
   font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  letter-spacing: 0.02em;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 /* --- Sections --- */
 .section {
-  padding: 5rem 2rem;
+  padding: 3rem 2.5rem;
   max-width: var(--max-width);
   margin: 0 auto;
 }
 
 .section-full {
-  padding: 5rem 2rem;
+  padding: 3rem 2.5rem;
   width: 100%;
 }
 
 .section-title {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 1rem;
-  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .section-subtitle {
-  font-size: 1.125rem;
+  font-size: 1rem;
   color: var(--text-secondary);
   max-width: 640px;
   line-height: 1.7;
@@ -174,33 +196,52 @@ a:hover {
 
 /* --- Hero Section --- */
 .hero {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
-  padding-top: calc(var(--nav-height) + 2rem);
-  padding-bottom: 4rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-top: calc(var(--nav-height) + 2.5rem);
+  padding-bottom: 1rem;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
 }
 
-.hero-title {
-  font-size: clamp(2rem, 4vw, 3.25rem);
+.hero-tagline {
+  font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 800;
   color: var(--text-primary);
-  max-width: 900px;
-  line-height: 1.15;
-  letter-spacing: -0.03em;
-  margin-bottom: 2rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  white-space: nowrap;
 }
 
-.hero-title .accent {
-  background: linear-gradient(135deg, var(--nvidia-green), var(--nvidia-green-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.hero-tagline .accent {
+  color: var(--nvidia-green);
+  -webkit-text-fill-color: var(--nvidia-green);
+}
+
+/* --- Paper Details Section --- */
+.paper-details-section {
+  text-align: center;
+  padding-top: 3rem;
+  padding-bottom: 1rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.paper-details-title {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  max-width: 900px;
+  margin: 0 auto 2rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.paper-details-title .accent {
+  color: var(--nvidia-green);
+  -webkit-text-fill-color: var(--nvidia-green);
 }
 
 /* --- Authors --- */
@@ -209,33 +250,34 @@ a:hover {
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.25rem 0.75rem;
-  margin-bottom: 1.5rem;
+  margin: 0 auto 1.5rem;
   max-width: 800px;
 }
 
 .author {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
 }
 
 .author a {
   color: var(--text-secondary);
-  border-bottom: 1px dotted var(--border-medium);
+  border-bottom: 1px solid transparent;
+  transition: all var(--transition-fast);
 }
 
 .author a:hover {
-  color: var(--nvidia-green-dark);
+  color: var(--nvidia-green);
   border-bottom-color: var(--nvidia-green);
 }
 
 .author .equal-contrib {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   vertical-align: super;
   color: var(--text-muted);
 }
 
 .author .affiliation-nums {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   vertical-align: super;
   color: var(--nvidia-green-dark);
   margin-left: 1px;
@@ -247,12 +289,12 @@ a:hover {
   justify-content: center;
   gap: 0.5rem 1.5rem;
   margin-bottom: 2rem;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
 }
 
 .affiliation .aff-num {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--nvidia-green-dark);
   margin-right: 0.25rem;
 }
@@ -270,17 +312,38 @@ a:hover {
   justify-content: center;
   align-items: center;
   gap: 2.5rem;
+  margin-top: 2.5rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
 }
 
 .institution-logo {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  opacity: 0.6;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  height: 28px;
+  width: auto;
+  filter: invert(1) brightness(0.4);
+  opacity: 0.5;
+  transition: all var(--transition-normal);
+}
+
+.institution-logo:hover {
+  filter: invert(1) brightness(0) sepia(1) saturate(10) hue-rotate(44deg);
+  opacity: 1;
+}
+
+.institution-logo[alt="UC Berkeley"] {
+  height: 32px;
+  position: relative;
+  top: 3px;
+}
+
+.institution-logo[alt="Stanford"] {
+  height: 26px;
+}
+
+.institution-logo[alt="CMU"] {
+  height: 30px;
+  position: relative;
+  top: 3px;
 }
 
 /* --- Hero Buttons --- */
@@ -295,10 +358,12 @@ a:hover {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.9rem;
-  font-weight: 600;
+  padding: 0.7rem 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   transition: all var(--transition-fast);
   border: none;
   cursor: pointer;
@@ -306,26 +371,39 @@ a:hover {
 
 .btn-primary {
   background: var(--nvidia-green);
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .btn-primary:hover {
   background: var(--nvidia-green-dark);
-  color: #fff;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  color: var(--text-primary);
 }
 
 .btn-outline {
   background: transparent;
   color: var(--text-secondary);
-  border: 1.5px solid var(--border-medium);
+  border: 1.5px solid var(--border-light);
+  position: relative;
+}
+
+.btn-outline::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--nvidia-green);
+  transition: width 0.3s ease;
 }
 
 .btn-outline:hover {
-  border-color: var(--nvidia-green);
-  color: var(--nvidia-green-dark);
-  background: var(--nvidia-green-bg);
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
+.btn-outline:hover::after {
+  width: 100%;
 }
 
 /* --- Chart Section --- */
@@ -333,6 +411,8 @@ a:hover {
   background: var(--bg-secondary);
   border-top: 1px solid var(--border-light);
   border-bottom: 1px solid var(--border-light);
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
 .chart-container {
@@ -342,24 +422,22 @@ a:hover {
 
 .chart-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 #timeline-chart {
   width: 100%;
-  min-height: 400px;
   background: var(--bg-primary);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  padding: 1.5rem;
-  position: relative;
+  border: 1px solid var(--border-light);
+  padding: 0.75rem;
 }
 
 .chart-legend {
   display: flex;
   justify-content: center;
   gap: 2rem;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
+  padding-bottom: 1rem;
   flex-wrap: wrap;
 }
 
@@ -367,13 +445,16 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .legend-circle {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   border: 2px solid var(--text-muted);
   background: var(--bg-primary);
@@ -397,11 +478,9 @@ a:hover {
 .chart-tooltip {
   position: absolute;
   pointer-events: none;
-  background: rgba(255, 255, 255, 0.97);
+  background: var(--bg-primary);
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-sm);
   padding: 0.75rem 1rem;
-  box-shadow: var(--shadow-lg);
   font-size: 0.8rem;
   z-index: 100;
   opacity: 0;
@@ -436,7 +515,7 @@ a:hover {
 }
 
 .tooltip-stat .task-value {
-  font-weight: 600;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 
@@ -451,14 +530,14 @@ a:hover {
 }
 
 .cta-content h2 {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .cta-content p {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
   margin-bottom: 1.5rem;
   line-height: 1.7;
@@ -466,14 +545,13 @@ a:hover {
 
 .cta-placeholder {
   background: var(--bg-secondary);
-  border: 2px dashed var(--border-medium);
-  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
   min-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-muted);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 /* --- Introduction Section --- */
@@ -489,11 +567,11 @@ a:hover {
 }
 
 .intro-title {
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
   font-weight: 800;
   text-align: center;
   margin-bottom: 1.5rem;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   line-height: 1.2;
 }
 
@@ -504,7 +582,7 @@ a:hover {
 }
 
 .intro-text p {
-  font-size: 1.05rem;
+  font-size: 1rem;
   color: var(--text-secondary);
   line-height: 1.8;
   margin-bottom: 1rem;
@@ -515,18 +593,19 @@ a:hover {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   margin-bottom: 3rem;
 }
 
 .feature-pill {
-  padding: 0.5rem 1.25rem;
-  background: var(--nvidia-green-bg);
-  border: 1px solid rgba(118, 185, 0, 0.2);
-  border-radius: 100px;
-  font-size: 0.85rem;
-  font-weight: 500;
+  padding: 0.4rem 1rem;
+  background: transparent;
+  border: 1px solid var(--nvidia-green);
+  font-size: 0.75rem;
+  font-weight: 700;
   color: var(--nvidia-green-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 /* --- Video Gallery --- */
@@ -538,8 +617,7 @@ a:hover {
 
 .video-placeholder {
   background: var(--bg-primary);
-  border: 2px dashed var(--border-medium);
-  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
   aspect-ratio: 16 / 10;
   display: flex;
   flex-direction: column;
@@ -556,11 +634,13 @@ a:hover {
 
 .video-placeholder .icon {
   font-size: 2rem;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .video-placeholder .label {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 /* --- Highlights Section --- */
@@ -574,17 +654,15 @@ a:hover {
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: center;
-  margin-bottom: 5rem;
+  margin-bottom: 4rem;
   padding: 2.5rem;
   background: var(--bg-primary);
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-normal);
+  transition: border-color var(--transition-normal);
 }
 
 .highlight-card:hover {
-  box-shadow: var(--shadow-md);
+  border-color: var(--nvidia-green);
 }
 
 .highlight-card:nth-child(even) {
@@ -599,33 +677,31 @@ a:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   background: var(--nvidia-green);
-  color: #fff;
-  border-radius: 50%;
-  font-size: 0.85rem;
-  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 800;
   margin-bottom: 1rem;
 }
 
 .highlight-title {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.75rem;
   line-height: 1.3;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .highlight-desc {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
   line-height: 1.7;
 }
 
 .highlight-figure {
   background: var(--bg-secondary);
-  border-radius: var(--radius-md);
   min-height: 250px;
   padding: 1rem;
   display: flex;
@@ -635,18 +711,20 @@ a:hover {
 
 .highlight-figure-placeholder {
   color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-align: center;
 }
 
 /* --- Footer --- */
 .footer {
   text-align: center;
-  padding: 2rem;
-  background: var(--bg-secondary);
-  border-top: 1px solid var(--border-light);
-  font-size: 0.8rem;
+  padding: 2.5rem;
+  background: var(--bg-black);
   color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 /* --- Animation Classes --- */
@@ -683,11 +761,11 @@ a:hover {
 /* --- Responsive --- */
 @media (max-width: 768px) {
   :root {
-    --nav-height: 56px;
+    --nav-height: 48px;
   }
 
   .navbar {
-    padding: 0 1rem;
+    padding: 0 1.25rem;
   }
 
   .nav-links {
@@ -701,7 +779,7 @@ a:hover {
 
   .nav-link {
     padding: 0.4rem 0.6rem;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   .section {
@@ -713,9 +791,8 @@ a:hover {
   }
 
   .hero {
-    min-height: auto;
     padding-top: calc(var(--nav-height) + 2rem);
-    padding-bottom: 3rem;
+    padding-bottom: 1rem;
   }
 
   .cta-section {
@@ -741,8 +818,9 @@ a:hover {
 }
 
 @media (max-width: 480px) {
-  .hero-title {
+  .hero-tagline {
     font-size: 1.75rem;
+    white-space: normal;
   }
 
   .authors-list {
