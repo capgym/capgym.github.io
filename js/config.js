@@ -40,7 +40,7 @@ const SITE_CONFIG = {
     { name: "Shankar Sastry", url: "https://www2.eecs.berkeley.edu/Faculty/Homepages/sastry.html", affiliations: [2], equalContrib: false },
     { name: "Yuke Zhu", url: "https://yukezhu.me/", affiliations: [1], equalContrib: false },
     { name: "Ken Goldberg", url: "https://www2.eecs.berkeley.edu/Faculty/Homepages/goldberg.html", affiliations: [2], equalContrib: false },
-    { name: "Jim \"Linxi\" Fan", url: "https://jimfan.me/", affiliations: [1], equalContrib: false },
+    { name: "Linxi \"Jim\" Fan", url: "https://jimfan.me/", affiliations: [1], equalContrib: false },
   ],
 
   // Affiliations
