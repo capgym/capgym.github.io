@@ -83,8 +83,10 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   padding: 0 2.5rem;
-  background: var(--bg-primary);
-  border-bottom: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   transition: box-shadow var(--transition-normal);
 }
 
@@ -194,6 +196,52 @@ a:hover {
   line-height: 1.7;
 }
 
+/* --- Hero Backdrop (unified aura container) --- */
+.hero-backdrop {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-backdrop::before,
+.hero-backdrop::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-backdrop::before {
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, #76b900 0%, #a3d940 40%, transparent 70%);
+  top: -200px;
+  left: -250px;
+  animation: aura-drift-1 8s ease-in-out infinite alternate;
+}
+
+.hero-backdrop::after {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, #a3d940 0%, #76b900 40%, transparent 70%);
+  top: -100px;
+  right: -200px;
+  animation: aura-drift-2 10s ease-in-out infinite alternate;
+}
+
+@keyframes aura-drift-1 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.2; }
+  50% { transform: translate(60px, 50px) scale(1.1); opacity: 0.3; }
+  100% { transform: translate(-20px, 30px) scale(0.95); opacity: 0.2; }
+}
+
+@keyframes aura-drift-2 {
+  0% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+  50% { transform: translate(-50px, 40px) scale(1.15); opacity: 0.25; }
+  100% { transform: translate(20px, 20px) scale(0.9); opacity: 0.15; }
+}
+
 /* --- Hero Section --- */
 .hero {
   display: flex;
@@ -204,6 +252,8 @@ a:hover {
   padding-bottom: 1rem;
   padding-left: 2.5rem;
   padding-right: 2.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-tagline {
@@ -408,16 +458,23 @@ a:hover {
 
 /* --- Chart Section --- */
 .chart-section {
-  background: var(--bg-secondary);
-  border-top: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+  padding-top: 0.5rem;
+  padding-bottom: 2rem;
 }
 
 .chart-container {
   max-width: var(--max-width);
   margin: 0 auto;
+}
+
+.chart-panel {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 1rem;
 }
 
 .chart-header {
@@ -427,8 +484,7 @@ a:hover {
 
 #timeline-chart {
   width: 100%;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-light);
+  background: transparent;
   padding: 0.75rem;
 }
 
@@ -478,8 +534,10 @@ a:hover {
 .chart-tooltip {
   position: absolute;
   pointer-events: none;
-  background: var(--bg-primary);
-  border: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   padding: 0.75rem 1rem;
   font-size: 0.8rem;
   z-index: 100;
@@ -556,7 +614,7 @@ a:hover {
 
 /* --- Introduction Section --- */
 .intro-section {
-  background: var(--bg-secondary);
+  background: linear-gradient(180deg, #f0f0f0 0%, var(--bg-secondary) 40%, var(--bg-secondary) 60%, #f0f0f0 100%);
   border-top: 1px solid var(--border-light);
   border-bottom: 1px solid var(--border-light);
 }
@@ -658,11 +716,13 @@ a:hover {
   padding: 2.5rem;
   background: var(--bg-primary);
   border: 1px solid var(--border-light);
-  transition: border-color var(--transition-normal);
+  transition: border-color var(--transition-normal), box-shadow 0.4s ease;
+  position: relative;
 }
 
 .highlight-card:hover {
   border-color: var(--nvidia-green);
+  box-shadow: 0 0 40px rgba(118, 185, 0, 0.1), 0 0 80px rgba(118, 185, 0, 0.05);
 }
 
 .highlight-card:nth-child(even) {

@@ -30,56 +30,59 @@
     <span class="nav-team" id="nav-team"></span>
   </nav>
 
-  <!-- ====== Hero Section (above the fold) ====== -->
-  <section class="hero" id="home">
-    <h1 class="hero-tagline" id="hero-tagline"></h1>
+  <!-- ====== Hero + Chart (unified aura backdrop) ====== -->
+  <div class="hero-backdrop" id="home">
+    <section class="hero">
+      <h1 class="hero-tagline" id="hero-tagline"></h1>
 
-    <div class="hero-buttons">
-      <a href="#" class="btn btn-outline" data-link="arxiv">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Paper
-      </a>
-      <a href="#" class="btn btn-outline" data-link="code">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-        Code
-      </a>
-      <a href="#" class="btn btn-primary" data-link="playground">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        Playground
-      </a>
-    </div>
-
-    <div class="institution-logos" id="institution-logos"></div>
-  </section>
-
-  <!-- ====== AI Progress on CaP-X (splash figure, still above the fold) ====== -->
-  <section class="section-full chart-section" id="progress">
-    <div class="chart-container" style="padding: 0 2rem;">
-      <div style="position: relative;">
-        <div id="timeline-chart"></div>
-        <div id="timeline-tooltip" class="chart-tooltip"></div>
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-outline" data-link="arxiv">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Paper
+        </a>
+        <a href="#" class="btn btn-outline" data-link="code">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Code
+        </a>
+        <a href="#" class="btn btn-primary" data-link="playground">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Playground
+        </a>
       </div>
 
-      <div class="chart-legend">
-        <div class="legend-item">
-          <div class="legend-circle"></div>
-          <span>Closed Source</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-circle dashed"></div>
-          <span>Open Source</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-line"></div>
-          <span>Frontier AI</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-line human"></div>
-          <span>Human Baseline</span>
+      <div class="institution-logos" id="institution-logos"></div>
+    </section>
+
+    <section class="section-full chart-section" id="progress">
+      <div class="chart-container" style="padding: 0 2rem;">
+        <div class="chart-panel">
+          <div style="position: relative;">
+            <div id="timeline-chart"></div>
+            <div id="timeline-tooltip" class="chart-tooltip"></div>
+          </div>
+
+          <div class="chart-legend">
+            <div class="legend-item">
+              <div class="legend-circle"></div>
+              <span>Closed Source</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-circle dashed"></div>
+              <span>Open Source</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-line"></div>
+              <span>Frontier AI</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-line human"></div>
+              <span>Human Baseline</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <!-- ====== Paper Details (second screen) ====== -->
   <section class="section paper-details-section" id="paper-details">
