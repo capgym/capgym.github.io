@@ -170,9 +170,9 @@ async function initTimelineChart() {
     .text("Avg. Success Rate (%)");
 
   // Human baseline — off-scale annotation with prominent axis break
-  const breakZoneTop = 4;
-  const breakZoneBottom = 30;
-  const breakZoneMid = (breakZoneTop + breakZoneBottom) / 2;
+  const breakZoneTop = 0;
+  const breakZoneBottom = 50;
+  const breakZoneMid = breakZoneTop + 16;
 
   // Diagonal hatch pattern for break zone
   const hatchId = "axis-break-hatch";
@@ -243,6 +243,46 @@ async function initTimelineChart() {
     .attr("y", bbox.y - 3)
     .attr("width", bbox.width + 12)
     .attr("height", bbox.height + 6);
+
+  // Animate human baseline badge
+  if (typeof gsap !== "undefined") {
+    gsap.from(labelBg.node(), { scaleX: 0, transformOrigin: "right center", duration: 0.6, delay: 0.8, ease: "power2.out" });
+    gsap.from(labelEl.node(), { opacity: 0, duration: 0.4, delay: 1.2, ease: "power2.out" });
+  }
+
+  // Frontier AI callout — best model badge, at the level of best model's Y position
+  const bestModel = [...models].sort((a, b) => b.avgSuccessRate - a.avgSuccessRate)[0];
+  const frontierText = `Frontier AI: ${bestModel.avgSuccessRate.toFixed(1)}%`;
+  const frontierColor = "#3B82F6";
+  const frontierY = y(bestModel.avgSuccessRate);
+
+  const frontierBg = g.append("rect")
+    .attr("fill", frontierColor)
+    .attr("rx", 0);
+
+  const frontierEl = g.append("text")
+    .attr("x", labelX)
+    .attr("y", frontierY)
+    .attr("text-anchor", "end")
+    .attr("dominant-baseline", "central")
+    .attr("fill", "#fff")
+    .attr("font-size", `${labelFontSize}px`)
+    .attr("font-weight", "700")
+    .attr("letter-spacing", "0.02em")
+    .text(frontierText);
+
+  const fbbox = frontierEl.node().getBBox();
+  frontierBg
+    .attr("x", fbbox.x - 6)
+    .attr("y", fbbox.y - 3)
+    .attr("width", fbbox.width + 12)
+    .attr("height", fbbox.height + 6);
+
+  // Animate frontier badge
+  if (typeof gsap !== "undefined") {
+    gsap.from(frontierBg.node(), { scaleX: 0, transformOrigin: "right center", duration: 0.6, delay: 1.0, ease: "power2.out" });
+    gsap.from(frontierEl.node(), { opacity: 0, duration: 0.4, delay: 1.4, ease: "power2.out" });
+  }
 
   // Compute SOTA frontier
   const sortedByDate = [...models].sort((a, b) => a.date - b.date);
@@ -393,26 +433,14 @@ async function initTimelineChart() {
 function showTooltip(event, model, data, tooltip) {
   if (!tooltip) return;
 
-  let html = `
+  const html = `
     <div class="tooltip-header" style="color: ${data.companyColors[model.company] || '#333'}">${model.displayName}</div>
     <div class="tooltip-company">${model.company} &middot; ${model.type} &middot; ${model.isClosed ? "Closed" : "Open"} Source</div>
-    <div class="tooltip-stat" style="font-weight:600; margin-bottom:0.4rem;">
+    <div class="tooltip-stat" style="font-weight:700;">
       <span>Avg Success Rate</span>
       <span>${model.avgSuccessRate.toFixed(1)}%</span>
     </div>
-    <hr style="border:none;border-top:1px solid #e8eaed;margin:0.3rem 0;">
   `;
-
-  for (const [task, val] of Object.entries(model.taskSuccessRates)) {
-    const displayVal = val !== null ? `${val}%` : "N/A";
-    const barWidth = val !== null ? Math.min(val, 100) : 0;
-    html += `
-      <div class="tooltip-stat">
-        <span class="task-name">${task}</span>
-        <span class="task-value">${displayVal}</span>
-      </div>
-    `;
-  }
 
   tooltip.innerHTML = html;
   tooltip.classList.add("visible");

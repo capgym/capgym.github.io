@@ -9,7 +9,7 @@ const SITE_CONFIG = {
   paperTitle: "CaP-X: A Framework for Benchmarking and Improving Coding Agents for Robot Manipulation",
 
   // Hero tagline (eye-catching, playful)
-  heroTagline: "Agents' First Physical Exam",
+  heroTagline: "LMs' First Physical Exam",
   heroTaglinePrefix: "CaP-X:",
 
   // Team branding (nav bar right side)
