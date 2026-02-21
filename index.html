@@ -113,6 +113,79 @@
     </div>
   </section>
 
+  <!-- ====== Real-World Demo Gallery ====== -->
+  <section class="section-full demo-section" id="demo">
+    <div class="demo-content" style="padding: 0 2rem; max-width: var(--max-width); margin: 0 auto;">
+      <h2 class="intro-title fade-in">LMs Can Zero-Shot on Robotics Tasks —<br>with <span class="agent-highlight">CaP-Agent0</span></h2>
+      <div class="intro-text fade-in">
+        <p>
+          Today's off-the-shelf LMs have incredible generalization, reasoning, and planning capabilities.
+          Agentic harnesses in <strong>CaP-Agent0</strong> unleashes their potential in the physical world.
+        </p>
+        <p class="demo-hint">Click on each task to see the agent in action.</p>
+      </div>
+
+      <div class="demo-gallery">
+        <div class="demo-video-card fade-in" data-caption="Caption coming soon.">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/agibot_demos/AgiBot Stack Everything.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Stack Everything</span>
+        </div>
+        <div class="demo-video-card fade-in" data-caption="Caption coming soon.">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/agibot_demos/AgiBot Restack.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Restack</span>
+        </div>
+        <div class="demo-video-card fade-in" data-caption="Caption coming soon.">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/agibot_demos/AgiBot Mechanical Search 2.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Mechanical Search</span>
+        </div>
+        <div class="demo-video-card fade-in" data-caption="Caption coming soon.">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/agibot_demos/AgiBot Semantic Reasoning.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Semantic Reasoning</span>
+        </div>
+        <div class="demo-video-card fade-in" data-caption="Caption coming soon.">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/agibot_demos/AgiBot Needle.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Needle</span>
+        </div>
+        <div class="demo-video-card fade-in" data-caption="Caption coming soon.">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/agibot_demos/AgiBot Elevator.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Elevator</span>
+        </div>
+        <div class="demo-video-card fade-in" data-caption="Caption coming soon.">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/agibot_demos/AgiBot Math.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Math</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ====== Introduction ====== -->
   <section class="section-full intro-section" id="introduction">
     <div class="intro-content" style="padding: 0 2rem;">
@@ -242,6 +315,20 @@
   <footer class="footer">
     <p>CaP-X Benchmark &copy; 2025</p>
   </footer>
+
+  <!-- ====== Demo Modal ====== -->
+  <div class="demo-modal-overlay" id="demo-modal">
+    <div class="demo-modal">
+      <div class="demo-modal-header">
+        <h3 class="demo-modal-title"></h3>
+        <button class="demo-modal-close" aria-label="Close">&times;</button>
+      </div>
+      <video class="demo-modal-video" autoplay loop muted playsinline controls></video>
+      <div class="demo-modal-caption">
+        <p class="demo-modal-desc"></p>
+      </div>
+    </div>
+  </div>
 
   <!-- ====== Scripts ====== -->
   <!-- D3.js -->

@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavbar();
   initAnimations();
   initAllCharts();
+  initDemoModal();
 });
 
 window.addEventListener("load", () => {
@@ -243,5 +244,60 @@ function initAnimations() {
         },
       }
     );
+  });
+}
+
+/* ==========================================
+   Demo Video Modal
+   ========================================== */
+
+function initDemoModal() {
+  const overlay = document.getElementById("demo-modal");
+  if (!overlay) return;
+
+  const modalVideo = overlay.querySelector(".demo-modal-video");
+  const modalTitle = overlay.querySelector(".demo-modal-title");
+  const modalDesc = overlay.querySelector(".demo-modal-desc");
+  const closeBtn = overlay.querySelector(".demo-modal-close");
+
+  function openModal(card) {
+    const source = card.querySelector("source");
+    const label = card.querySelector(".demo-video-label");
+    const caption = card.getAttribute("data-caption") || "";
+
+    modalVideo.src = source ? source.getAttribute("src") : "";
+    modalTitle.textContent = label ? label.textContent : "";
+    modalDesc.textContent = caption;
+
+    overlay.classList.add("active");
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.paddingRight = scrollbarWidth + "px";
+  }
+
+  function closeModal() {
+    overlay.classList.remove("active");
+    document.documentElement.style.overflow = "";
+    document.body.style.paddingRight = "";
+    modalVideo.removeAttribute("src");
+  }
+
+  document.querySelectorAll(".demo-video-card").forEach(card => {
+    card.addEventListener("click", () => openModal(card));
+  });
+
+  closeBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    closeModal();
+  });
+
+  overlay.addEventListener("click", e => {
+    if (e.target === overlay) closeModal();
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && overlay.classList.contains("active")) {
+      closeModal();
+    }
   });
 }
