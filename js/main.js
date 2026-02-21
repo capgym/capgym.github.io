@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initAnimations();
   initAllCharts();
   initDemoModal();
+  initDemoGalleryToggle();
 });
 
 window.addEventListener("load", () => {
@@ -23,6 +24,12 @@ window.addEventListener("load", () => {
     history.replaceState(null, "", window.location.pathname);
   }
   window.scrollTo(0, 0);
+
+  // On mobile, scroll chart to the right to show latest data
+  const chartPanel = document.querySelector(".chart-panel");
+  if (chartPanel && window.innerWidth <= 768) {
+    chartPanel.scrollLeft = chartPanel.scrollWidth;
+  }
 });
 
 /* ==========================================
@@ -298,6 +305,39 @@ function initDemoModal() {
   document.addEventListener("keydown", e => {
     if (e.key === "Escape" && overlay.classList.contains("active")) {
       closeModal();
+    }
+  });
+}
+
+/* ==========================================
+   Demo Gallery Collapse/Expand (mobile)
+   ========================================== */
+
+function initDemoGalleryToggle() {
+  const gallery = document.querySelector(".demo-gallery");
+  const toggle = document.getElementById("demo-gallery-toggle");
+  if (!gallery || !toggle) return;
+
+  function isMobile() {
+    return window.matchMedia("(max-width: 768px)").matches;
+  }
+
+  // Collapse by default on mobile
+  if (isMobile()) {
+    gallery.classList.add("collapsed");
+  }
+
+  toggle.addEventListener("click", () => {
+    const collapsed = gallery.classList.toggle("collapsed");
+    toggle.textContent = collapsed ? "Show More" : "Show Less";
+  });
+
+  // Handle resize: add/remove collapsed
+  window.addEventListener("resize", () => {
+    if (!isMobile()) {
+      gallery.classList.remove("collapsed");
+    } else if (!gallery.classList.contains("collapsed") && toggle.textContent === "Show More") {
+      gallery.classList.add("collapsed");
     }
   });
 }

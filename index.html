@@ -134,13 +134,13 @@
           </div>
           <span class="demo-video-label">Stack Everything</span>
         </div>
-        <div class="demo-video-card fade-in" data-caption="The model can infer additional actions from the observation. It knows to destack the yellow cube first before stacking the red cube on top.">
+        <div class="demo-video-card fade-in" data-caption="The model naturally decomposes a high-level task (take the elevator down) into substeps (push button, lower arm, move into elevator). It also uses advanced programming and mathematical tools (e.g. SciPy RANSAC for plane fitting) to execute the button-pushing.">
           <div class="demo-video-wrap">
             <video class="demo-video" autoplay loop muted playsinline>
-              <source src="assets/agibot_demos/AgiBot Restack.mp4" type="video/mp4">
+              <source src="assets/agibot_demos/AgiBot Elevator.mp4" type="video/mp4">
             </video>
           </div>
-          <span class="demo-video-label">Restack</span>
+          <span class="demo-video-label">Elevator</span>
         </div>
         <div class="demo-video-card fade-in" data-caption="The model can plan a long-horizon, ordered mechanical search, and execute closed-loop behavior in a multi-turn setting.">
           <div class="demo-video-wrap">
@@ -149,6 +149,22 @@
             </video>
           </div>
           <span class="demo-video-label">Mechanical Search</span>
+        </div>
+        <div class="demo-video-card fade-in" data-caption="The model can naturally lift textual context from image observation. It can directly read the math problem posed by cubes, and understand the hinted action (using the other cubes to complete the equation).">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/agibot_demos/AgiBot Math.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Math</span>
+        </div>
+        <div class="demo-video-card fade-in" data-caption="The model can infer additional actions from the observation. It knows to destack the yellow cube first before stacking the red cube on top.">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/agibot_demos/AgiBot Restack.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Restack</span>
         </div>
         <div class="demo-video-card fade-in" data-caption="The model naturally generalizes to a wide vocabulary of semantics in the physical world. It can extract abstract properties (e.g. color, shape) when planning.">
           <div class="demo-video-wrap">
@@ -166,23 +182,8 @@
           </div>
           <span class="demo-video-label">Needle in a Haystack</span>
         </div>
-        <div class="demo-video-card fade-in" data-caption="The model naturally decomposes a high-level task (take the elevator down) into substeps (push button, lower arm, move into elevator). It also uses advanced programming and mathematical tools (e.g. SciPy RANSAC for plane fitting) to execute the button-pushing.">
-          <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
-              <source src="assets/agibot_demos/AgiBot Elevator.mp4" type="video/mp4">
-            </video>
-          </div>
-          <span class="demo-video-label">Elevator</span>
-        </div>
-        <div class="demo-video-card fade-in" data-caption="The model can naturally lift textual context from image observation. It can directly read the math problem posed by cubes, and understand the hinted action (using the other cubes to complete the equation).">
-          <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
-              <source src="assets/agibot_demos/AgiBot Math.mp4" type="video/mp4">
-            </video>
-          </div>
-          <span class="demo-video-label">Math</span>
-        </div>
       </div>
+      <button class="demo-gallery-toggle" id="demo-gallery-toggle">Show More</button>
     </div>
   </section>
 

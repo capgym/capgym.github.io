@@ -708,12 +708,11 @@ a:hover {
 
 .demo-hint {
   display: inline-block;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-secondary);
-  font-style: italic;
-  margin-top: 0.75rem;
-  padding: 0.5rem 1.25rem;
+  margin-top: 0.5rem;
+  padding: 0.35rem 1rem;
   background: linear-gradient(
     160deg,
     rgba(255, 255, 255, 0.65) 0%,
@@ -793,6 +792,27 @@ a:hover {
   letter-spacing: 0.04em;
   color: var(--text-secondary);
   text-align: center;
+}
+
+.demo-gallery-toggle {
+  display: none;
+  margin: 1.5rem auto 0;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.demo-gallery-toggle:hover {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
 }
 
 /* --- Demo Modal --- */
@@ -1147,12 +1167,76 @@ a:hover {
     grid-template-columns: 1fr;
   }
 
-  .institution-logos {
-    gap: 1.5rem;
+  /* Aura blobs: shrink so they stay as two distinct blobs */
+  .hero-backdrop::before {
+    width: 350px;
+    height: 350px;
+    top: -150px;
+    left: -150px;
   }
 
+  .hero-backdrop::after {
+    width: 300px;
+    height: 300px;
+    top: -80px;
+    right: -130px;
+  }
+
+  /* Title margins */
+  .hero {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .hero-tagline {
+    white-space: normal;
+    padding: 0 0.5rem;
+  }
+
+  /* Institution logos: one per row, smaller */
+  .institution-logos {
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .institution-logo,
+  .institution-logo[alt="UC Berkeley"],
+  .institution-logo[alt="Stanford"],
+  .institution-logo[alt="CMU"] {
+    height: 22px;
+    top: 0;
+  }
+
+  /* Chart: horizontal scroll to preserve aspect ratio */
+  .chart-panel {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Disable liquid shine on mobile — it causes scroll expansion */
+  .chart-panel::before {
+    display: none;
+  }
+
+  .chart-panel > div {
+    min-width: 700px;
+    width: 700px;
+  }
+
+  /* Demo gallery: 2 columns, collapsible */
   .demo-gallery {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .demo-gallery.collapsed .demo-video-card:nth-child(n+5) {
+    display: none;
+  }
+
+  .demo-gallery-toggle {
+    display: block;
   }
 }
 
@@ -1168,5 +1252,9 @@ a:hover {
 
   .author {
     font-size: 0.85rem;
+  }
+
+  .demo-gallery {
+    grid-template-columns: 1fr;
   }
 }
