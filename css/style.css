@@ -1026,7 +1026,7 @@ a:hover {
 }
 
 .sim-gallery .demo-video-wrap {
-  aspect-ratio: 1;
+  aspect-ratio: 16 / 9;
 }
 
 /* --- Highlights Section --- */
