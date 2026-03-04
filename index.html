@@ -116,10 +116,6 @@
             <video class="demo-video" autoplay loop muted playsinline>
               <source src="assets/franka_demos/Franka Cross Embodiment.mp4" type="video/mp4">
             </video>
-            <span class="demo-code-badge">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              Code
-            </span>
           </div>
           <span class="demo-video-label">Cross Embodiment</span>
         </div>
@@ -199,32 +195,85 @@
         <span class="feature-pill">Open Source</span>
       </div>
 
-      <!-- Video Gallery -->
-      <h3 class="section-title fade-in" style="text-align:center; font-size:1.5rem; margin-bottom:1.5rem;">Results Gallery</h3>
-      <div class="video-gallery">
-        <div class="video-placeholder">
-          <span class="icon">&#9654;</span>
-          <span class="label">Cube Lift — Sim</span>
+      <!-- Sim Demo Gallery -->
+      <h3 class="section-title fade-in" style="text-align:center; font-size:1.5rem; margin-bottom:1.5rem;">Simulation Results</h3>
+      <p class="demo-hint fade-in" style="text-align:center; margin-bottom:1.5rem;">Click on each task to see the agent in action.</p>
+      <div class="sim-gallery">
+        <div class="demo-video-card fade-in"
+             data-caption="A robot arm picks up the red cube and stacks it precisely on top of the green cube. The task requires accurate depth estimation and fine-grained placement to land the cube flush on a small target surface without knocking it over."
+             data-code-src="assets/sim_demos/sim_cube_stack_code.py">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/sim_demos/sim_cube_stack.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Cube Stack</span>
         </div>
-        <div class="video-placeholder">
-          <span class="icon">&#9654;</span>
-          <span class="label">Cube Stack — Sim</span>
+
+        <div class="demo-video-card fade-in"
+             data-caption="The robot navigates a cluttered tabletop — with multiple metallic bowls, a plate, and other objects — and identifies the correct black bowl to place onto the white plate. The challenge lies in semantic disambiguation among visually similar objects."
+             data-code-src="assets/sim_demos/sim_pick_up_black_bowl_put_on_white_plate_code.py">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/sim_demos/sim_pick_up_black_bowl_put_on_white_plate.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Semantic Object Selection</span>
         </div>
-        <div class="video-placeholder">
-          <span class="icon">&#9654;</span>
-          <span class="label">Spill Wipe — Sim</span>
+
+        <div class="demo-video-card fade-in"
+             data-caption="A multi-step task requiring sequential reasoning: the arm first opens the drawer, then picks up the bowl and places it inside the confined space. The agent detects failure mid-execution and retries the placement autonomously."
+             data-code-src="assets/sim_demos/sim_put_bowl_in_drawer_w_retry_code.py">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/sim_demos/sim_put_bowl_in_drawer_w_retry.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Sequential Drawer Task</span>
         </div>
-        <div class="video-placeholder">
-          <span class="icon">&#9654;</span>
-          <span class="label">Peg Insert — Sim</span>
+
+        <div class="demo-video-card fade-in"
+             data-caption="The robot picks up a wine bottle standing upright and inserts it into a slanted wine rack. The difficulty comes from the precise angular alignment required to slide the bottle into a narrow rack slot, and transitioning from an upright grasp to a near-horizontal insertion orientation."
+             data-code-src="assets/sim_demos/sim_put_wine_bottle_on_rack_code.py">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/sim_demos/sim_put_wine_bottle_on_rack.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Precise Bottle Racking</span>
         </div>
-        <div class="video-placeholder">
-          <span class="icon">&#9654;</span>
-          <span class="label">Real Robot — Cube Lift</span>
+
+        <div class="demo-video-card fade-in"
+             data-caption="The robot arm sweeps across a large irregular spill with a wiping tool, making multiple passes to clean the table. The agent detects residual stain and retries coverage of missed areas, finishing with a nearly clean surface."
+             data-code-src="assets/sim_demos/sim_spill_wipe_w_retry_code.py">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/sim_demos/sim_spill_wipe_w_retry.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Spill Cleanup</span>
         </div>
-        <div class="video-placeholder">
-          <span class="icon">&#9654;</span>
-          <span class="label">Real Robot — Stack</span>
+
+        <div class="demo-video-card fade-in"
+             data-caption="The robot arm grips and rotates a small stove dial to activate a burner. Success is confirmed by the coil transitioning from dark grey to glowing red-orange — a dexterous fine motor control challenge requiring precise dial manipulation."
+             data-code-src="assets/sim_demos/sim_turn_on_stolve_code.py">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/sim_demos/sim_turn_on_stolve.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Stove Knob Turning</span>
+        </div>
+
+        <div class="demo-video-card fade-in"
+             data-caption="Two robot arms coordinate to grasp and lift a large box that neither can handle alone. The task requires synchronized bimanual control — both grippers must engage simultaneously and move in sync. The agent detects an initial failed grasp and retries before completing the coordinated lift."
+             data-code-src="assets/sim_demos/sim_two_arm_lift_w_retry_code.py">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/sim_demos/sim_two_arm_lift_w_retry.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Bimanual Coordination</span>
         </div>
       </div>
     </div>

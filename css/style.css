@@ -1019,38 +1019,14 @@ a:hover {
 }
 
 /* --- Video Gallery --- */
-.video-gallery {
+.sim-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
 }
 
-.video-placeholder {
-  background: var(--bg-primary);
-  border: 1px solid var(--border-light);
-  aspect-ratio: 16 / 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  gap: 0.5rem;
-  transition: border-color var(--transition-fast);
-}
-
-.video-placeholder:hover {
-  border-color: var(--nvidia-green);
-}
-
-.video-placeholder .icon {
-  font-size: 2rem;
-  opacity: 0.4;
-}
-
-.video-placeholder .label {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+.sim-gallery .demo-video-wrap {
+  aspect-ratio: 1;
 }
 
 /* --- Highlights Section --- */
@@ -1220,8 +1196,8 @@ a:hover {
     direction: ltr;
   }
 
-  .video-gallery {
-    grid-template-columns: 1fr;
+  .sim-gallery {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   /* Aura blobs: shrink so they stay as two distinct blobs */

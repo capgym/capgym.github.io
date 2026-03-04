@@ -310,6 +310,16 @@ function initDemoModal() {
   }
 
   document.querySelectorAll(".demo-video-card").forEach(card => {
+    // Auto-inject code badge for cards with source code
+    if (card.getAttribute("data-code-src")) {
+      const wrap = card.querySelector(".demo-video-wrap");
+      if (wrap && !wrap.querySelector(".demo-code-badge")) {
+        const badge = document.createElement("span");
+        badge.className = "demo-code-badge";
+        badge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Code`;
+        wrap.appendChild(badge);
+      }
+    }
     card.addEventListener("click", () => openModal(card));
   });
 
