@@ -857,6 +857,10 @@ a:hover {
   justify-content: space-between;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border-light);
+  position: sticky;
+  top: 0;
+  background: var(--bg-primary);
+  z-index: 1;
 }
 
 .demo-modal-title {
@@ -904,6 +908,60 @@ a:hover {
   font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.7;
+}
+
+/* Code badge on video thumbnail */
+.demo-code-badge {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  background: rgba(118, 185, 0, 0.9);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.55rem;
+  pointer-events: none;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.demo-modal-code {
+  padding: 0 1.5rem 1.5rem;
+  border-top: 1px solid var(--border-light);
+  margin-top: 0.5rem;
+}
+
+.demo-modal-code-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+  margin-top: 1rem;
+}
+
+.demo-modal-code code[class*="language-"] {
+  background: transparent;
+}
+
+.demo-modal-code pre,
+.demo-modal-code pre[class*="language-"] {
+  background: #282c34;
+  color: #c5c8c6;
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 0.78rem;
+  line-height: 1.65;
+  margin: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 0;
+  text-shadow: none;
 }
 
 /* --- Introduction Section --- */

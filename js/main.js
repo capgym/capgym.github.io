@@ -265,16 +265,36 @@ function initDemoModal() {
   const modalVideo = overlay.querySelector(".demo-modal-video");
   const modalTitle = overlay.querySelector(".demo-modal-title");
   const modalDesc = overlay.querySelector(".demo-modal-desc");
+  const modalCode = document.getElementById("demo-modal-code");
+  const modalCodeBlock = overlay.querySelector(".demo-modal-code-block");
   const closeBtn = overlay.querySelector(".demo-modal-close");
 
   function openModal(card) {
     const source = card.querySelector("source");
     const label = card.querySelector(".demo-video-label");
     const caption = card.getAttribute("data-caption") || "";
+    const codeSrc = card.getAttribute("data-code-src");
 
     modalVideo.src = source ? source.getAttribute("src") : "";
     modalTitle.textContent = label ? label.textContent : "";
     modalDesc.textContent = caption;
+
+    // Reset scroll position
+    overlay.querySelector(".demo-modal").scrollTop = 0;
+
+    // Code block
+    if (codeSrc && modalCode && modalCodeBlock) {
+      fetch(codeSrc)
+        .then(r => r.text())
+        .then(text => {
+          modalCodeBlock.textContent = text;
+          modalCode.style.display = "";
+          if (typeof Prism !== "undefined") Prism.highlightElement(modalCodeBlock);
+        })
+        .catch(() => { modalCode.style.display = "none"; });
+    } else if (modalCode) {
+      modalCode.style.display = "none";
+    }
 
     overlay.classList.add("active");
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;

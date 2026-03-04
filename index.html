@@ -13,6 +13,8 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
+  <!-- Prism syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-one-dark.min.css">
 </head>
 <body>
 
@@ -109,11 +111,15 @@
           </div>
           <span class="demo-video-label">Embodied Reasoning</span>
         </div>
-        <div class="demo-video-card fade-in" data-caption="CaP-Agent0 generalizes zero-shot across embodiments. Given the same task and properly configured tool APIs, it completes the stacking task on a Franka robot.">
+        <div class="demo-video-card fade-in" data-caption="CaP-Agent0 generalizes zero-shot across embodiments. Given the same task and properly configured tool APIs, it completes the stacking task on a Franka robot." data-code-src="assets/franka_demos/franka_cross_embodiment_code.py">
           <div class="demo-video-wrap">
             <video class="demo-video" autoplay loop muted playsinline>
               <source src="assets/franka_demos/Franka Cross Embodiment.mp4" type="video/mp4">
             </video>
+            <span class="demo-code-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Code
+            </span>
           </div>
           <span class="demo-video-label">Cross Embodiment</span>
         </div>
@@ -312,6 +318,10 @@
       <div class="demo-modal-caption">
         <p class="demo-modal-desc"></p>
       </div>
+      <div class="demo-modal-code" id="demo-modal-code" style="display:none;">
+        <p class="demo-modal-code-label">Agent Code</p>
+        <pre><code class="demo-modal-code-block language-python"></code></pre>
+      </div>
     </div>
   </div>
 
@@ -322,6 +332,10 @@
   <!-- GSAP + ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- Prism syntax highlighting -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
 
   <!-- App scripts -->
   <script src="js/config.js"></script>
