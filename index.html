@@ -132,7 +132,15 @@
               <source src="assets/agibot_demos/AgiBot Stack Everything.mp4" type="video/mp4">
             </video>
           </div>
-          <span class="demo-video-label">Stack Everything</span>
+          <span class="demo-video-label">Embodied Reasoning</span>
+        </div>
+        <div class="demo-video-card fade-in" data-caption="CaP-Agent0 generalizes zero-shot across embodiments. Given the same task and properly configured tool APIs, it completes the stacking task on a Franka robot.">
+          <div class="demo-video-wrap">
+            <video class="demo-video" autoplay loop muted playsinline>
+              <source src="assets/franka_demos/Franka Cross Embodiment.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Cross Embodiment</span>
         </div>
         <div class="demo-video-card fade-in" data-caption="The model naturally decomposes a high-level task (take the elevator down) into substeps (push button, lower arm, move into elevator). It also uses advanced programming and mathematical tools (e.g. SciPy RANSAC for plane fitting) to execute the button-pushing.">
           <div class="demo-video-wrap">
@@ -140,7 +148,7 @@
               <source src="assets/agibot_demos/AgiBot Elevator.mp4" type="video/mp4">
             </video>
           </div>
-          <span class="demo-video-label">Elevator</span>
+          <span class="demo-video-label">Loco-Manipulation</span>
         </div>
         <div class="demo-video-card fade-in" data-caption="The model can plan a long-horizon, ordered mechanical search, and execute closed-loop behavior in a multi-turn setting.">
           <div class="demo-video-wrap">
@@ -148,7 +156,7 @@
               <source src="assets/agibot_demos/AgiBot Mechanical Search 2.mp4" type="video/mp4">
             </video>
           </div>
-          <span class="demo-video-label">Mechanical Search</span>
+          <span class="demo-video-label">Long-Horizon Task Planning</span>
         </div>
         <div class="demo-video-card fade-in" data-caption="The model can naturally lift textual context from image observation. It can directly read the math problem posed by cubes, and understand the hinted action (using the other cubes to complete the equation).">
           <div class="demo-video-wrap">
@@ -156,7 +164,7 @@
               <source src="assets/agibot_demos/AgiBot Math.mp4" type="video/mp4">
             </video>
           </div>
-          <span class="demo-video-label">Math</span>
+          <span class="demo-video-label">Multimodal Reasoning</span>
         </div>
         <div class="demo-video-card fade-in" data-caption="The model can infer additional actions from the observation. It knows to destack the yellow cube first before stacking the red cube on top.">
           <div class="demo-video-wrap">
@@ -164,15 +172,15 @@
               <source src="assets/agibot_demos/AgiBot Restack.mp4" type="video/mp4">
             </video>
           </div>
-          <span class="demo-video-label">Restack</span>
+          <span class="demo-video-label">Subtask Inference</span>
         </div>
-        <div class="demo-video-card fade-in" data-caption="The model naturally generalizes to a wide vocabulary of semantics in the physical world. It can extract abstract properties (e.g. color, shape) when planning.">
+        <div class="demo-video-card fade-in" data-caption="The model follows natural language instructions that reference a wide vocabulary of object properties in the physical world. It correctly interprets abstract descriptors (e.g. color, shape) and acts on the right target accordingly.">
           <div class="demo-video-wrap">
             <video class="demo-video" autoplay loop muted playsinline>
               <source src="assets/agibot_demos/AgiBot Semantic Reasoning.mp4" type="video/mp4">
             </video>
           </div>
-          <span class="demo-video-label">Semantic Reasoning</span>
+          <span class="demo-video-label">Language Following</span>
         </div>
         <div class="demo-video-card fade-in" data-caption="Testing robustness against distractors? We've got a full table of them. Using a verification tool (Molmo 2), the model can effortlessly identify the target in the most cluttered environment.">
           <div class="demo-video-wrap">
@@ -180,7 +188,7 @@
               <source src="assets/agibot_demos/AgiBot Needle.mp4" type="video/mp4">
             </video>
           </div>
-          <span class="demo-video-label">Needle in a Haystack</span>
+          <span class="demo-video-label">Enhanced Visual Grounding</span>
         </div>
       </div>
       <button class="demo-gallery-toggle" id="demo-gallery-toggle">Show More</button>
