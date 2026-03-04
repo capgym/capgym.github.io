@@ -893,6 +893,9 @@ a:hover {
 .demo-modal-video {
   width: 100%;
   display: block;
+  max-height: 60vh;
+  object-fit: contain;
+  background: #000;
 }
 
 .demo-modal-bar {
