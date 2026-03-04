@@ -103,8 +103,7 @@ a:hover {
   font-size: 0.9rem;
   font-weight: 700;
   color: var(--text-primary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
 }
 
 .nav-links {
