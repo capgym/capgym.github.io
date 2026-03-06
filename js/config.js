@@ -36,6 +36,7 @@ const SITE_CONFIG = {
     { name: "Wenli Xiao", url: "https://www.wenlixiao.com/", affiliations: [4], equalContrib: false },
     { name: "Guanzhi Wang", url: "https://guanzhi.me/", affiliations: [1], equalContrib: false },
     { name: "Fei-Fei Li", url: "https://profiles.stanford.edu/fei-fei-li", affiliations: [3], equalContrib: false },
+    { name: "Guanya Shi", url: "https://www.gshi.me/", affiliations: [4], equalContrib: false },
     { name: "Jiajun Wu", url: "https://jiajunwu.com/", affiliations: [3], equalContrib: false },
     { name: "Shankar Sastry", url: "https://www2.eecs.berkeley.edu/Faculty/Homepages/sastry.html", affiliations: [2], equalContrib: false },
     { name: "Yuke Zhu", url: "https://yukezhu.me/", affiliations: [1], equalContrib: false },
