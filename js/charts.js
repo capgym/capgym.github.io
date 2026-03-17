@@ -467,8 +467,8 @@ function hideTooltip(tooltip) {
 }
 
 /* ==========================================
-   Highlight Figure 1 — Task Success Rates
-   Bar chart of frontier models across tasks
+   Highlight Figure 1 — AI vs Human Gap
+   Dot strip showing all models vs human baseline
    ========================================== */
 
 async function initHighlightFigure1() {
@@ -479,85 +479,93 @@ async function initHighlightFigure1() {
   if (!container) return;
   container.innerHTML = "";
 
-  // Pick top 5 models by avgSuccessRate
-  const topModels = [...data.models]
-    .sort((a, b) => b.avgSuccessRate - a.avgSuccessRate)
-    .slice(0, 5);
+  // Filter to 5 frontier models
+  const showIds = [
+    "google/gemini-3-pro", "anthropic/claude-opus-4-5", "openai/gpt-5.2",
+    "openai/gpt-oss-120b", "deepseek-ai/deepseek-v3.1-terminus"
+  ];
+  const models = showIds
+    .map(id => data.models.find(m => m.id === id))
+    .filter(Boolean)
+    .sort((a, b) => b.avgSuccessRate - a.avgSuccessRate);
+  const bestModel = models[0];
+  const humanBaseline = data.humanBaseline;
 
-  const margin = { top: 20, right: 20, bottom: 60, left: 50 };
+  // Add human as the top row
+  const rows = [
+    { displayName: "Human", avgSuccessRate: humanBaseline, company: "_human" },
+    ...models
+  ];
+
+  const labelWidth = 110;
+  const pctWidth = 50;
+  const margin = { top: 12, right: pctWidth + 10, bottom: 12, left: labelWidth };
   const width = container.clientWidth - margin.left - margin.right;
-  const height = 220 - margin.top - margin.bottom;
+  const rowH = 28;
+  const rowGap = 6;
+  const humanGap = 14; // extra gap after human row
+  const totalH = rows.length * rowH + (rows.length - 1) * rowGap + humanGap;
+  const height = totalH;
 
   const svg = d3.select(container)
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
+    .attr("width", container.clientWidth)
     .attr("height", height + margin.top + margin.bottom);
 
   const g = svg.append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  const x0 = d3.scaleBand()
-    .domain(topModels.map(m => m.displayName))
-    .range([0, width])
-    .padding(0.3);
+  const x = d3.scaleLinear().domain([0, 100]).range([0, width]);
 
-  const y = d3.scaleLinear()
-    .domain([0, Math.max(40, d3.max(topModels, d => d.avgSuccessRate) * 1.2)])
-    .range([height, 0]);
+  rows.forEach((m, i) => {
+    const isHuman = m.company === "_human";
+    const yOffset = isHuman ? 0 : humanGap;
+    const cy = i * (rowH + rowGap) + rowH / 2 + yOffset;
+    const barH = 16;
+    const color = isHuman ? "#76b900" : (data.companyColors[m.company] || "#76b900");
+    const isBest = !isHuman && m.id === bestModel.id;
 
-  // Grid
-  g.selectAll(".grid-line")
-    .data(y.ticks(4))
-    .enter()
-    .append("line")
-    .attr("x1", 0).attr("x2", width)
-    .attr("y1", d => y(d)).attr("y2", d => y(d))
-    .attr("stroke", "#e8eaed").attr("stroke-width", 0.5);
+    // Bar
+    g.append("rect")
+      .attr("x", 0)
+      .attr("y", cy - barH / 2)
+      .attr("width", x(m.avgSuccessRate))
+      .attr("height", barH)
+      .attr("fill", color)
+      .attr("opacity", isHuman ? 0.85 : (isBest ? 0.8 : 0.55))
+      .attr("rx", 0);
 
-  // Bars
-  g.selectAll(".bar")
-    .data(topModels)
-    .enter()
-    .append("rect")
-    .attr("x", d => x0(d.displayName))
-    .attr("y", d => y(d.avgSuccessRate))
-    .attr("width", x0.bandwidth())
-    .attr("height", d => height - y(d.avgSuccessRate))
-    .attr("fill", d => data.companyColors[d.company] || "#76b900")
-    .attr("rx", 4)
-    .attr("opacity", 0.85);
+    // Model name (left of bar)
+    g.append("text")
+      .attr("x", -10)
+      .attr("y", cy)
+      .attr("text-anchor", "end")
+      .attr("dominant-baseline", "central")
+      .attr("font-size", isHuman ? "12px" : (isBest ? "12px" : "11px"))
+      .attr("font-weight", isHuman || isBest ? "700" : "500")
+      .attr("fill", isHuman ? "#76b900" : "#333")
+      .text(m.displayName);
 
-  // Bar labels
-  g.selectAll(".bar-label")
-    .data(topModels)
-    .enter()
-    .append("text")
-    .attr("x", d => x0(d.displayName) + x0.bandwidth() / 2)
-    .attr("y", d => y(d.avgSuccessRate) - 5)
-    .attr("text-anchor", "middle")
-    .attr("font-size", "12px")
-    .attr("font-weight", "600")
-    .attr("fill", "#4a4a6a")
-    .text(d => d.avgSuccessRate.toFixed(1) + "%");
+    // Percentage (right of bar)
+    g.append("text")
+      .attr("x", x(m.avgSuccessRate) + 8)
+      .attr("y", cy)
+      .attr("dominant-baseline", "central")
+      .attr("font-size", isHuman ? "13px" : (isBest ? "13px" : "11px"))
+      .attr("font-weight", isHuman || isBest ? "800" : "600")
+      .attr("fill", isHuman ? "#76b900" : "#333")
+      .text(m.avgSuccessRate.toFixed(1) + "%");
 
-  // X axis
-  g.append("g")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x0))
-    .call(g => g.select(".domain").attr("stroke", "#d0d4da"))
-    .call(g => g.selectAll(".tick line").remove())
-    .call(g => g.selectAll(".tick text")
-      .attr("fill", "#4a4a6a")
-      .attr("font-size", "12px")
-      .attr("transform", "rotate(-25)")
-      .attr("text-anchor", "end"));
-
-  // Y axis
-  g.append("g")
-    .call(d3.axisLeft(y).ticks(4).tickFormat(d => d + "%"))
-    .call(g => g.select(".domain").remove())
-    .call(g => g.selectAll(".tick line").remove())
-    .call(g => g.selectAll(".tick text").attr("fill", "#8888a0").attr("font-size", "12px"));
+    // Separator line after human row
+    if (isHuman) {
+      g.append("line")
+        .attr("x1", -margin.left + 10).attr("x2", width + 40)
+        .attr("y1", cy + rowH / 2 + humanGap / 2)
+        .attr("y2", cy + rowH / 2 + humanGap / 2)
+        .attr("stroke", "#e0e0e0").attr("stroke-width", 1)
+        .attr("stroke-dasharray", "4,3");
+    }
+  });
 }
 
 /* ==========================================
@@ -663,12 +671,279 @@ async function initHighlightFigure2() {
 }
 
 /* ==========================================
+   Highlight Figure 2 — CaP-Agent0 vs VLAs on LIBERO-PRO
+   Data from Table 2 in the paper
+   ========================================== */
+
+function initHighlightFigure2VLA() {
+  const container = document.getElementById("highlight-fig-2");
+  if (!container) return;
+  container.innerHTML = "";
+
+  /* Data from Table 2: LIBERO-PRO (averaged across 30 tasks)
+     Each suite has Pos (position perturbation) and Task (instruction perturbation) averages.
+     Values are success rates as percentages. */
+  const suites = [
+    { name: "libero-object",  pi05_pos: 17, pi05_task: 1,  agent_pos: 22, agent_task: 18 },
+    { name: "libero-goal",    pi05_pos: 0,  pi05_task: 38, agent_pos: 26, agent_task: 17 },
+    { name: "libero-spatial", pi05_pos: 20, pi05_task: 1,  agent_pos: 12, agent_task: 14 },
+  ];
+
+  const suiteData = suites.map(s => ({
+    name: s.name,
+    pi05: Math.round((s.pi05_pos + s.pi05_task) / 2),
+    agent: Math.round((s.agent_pos + s.agent_task) / 2),
+  }));
+
+  const overallAvg = {
+    openVLA: 0,
+    pi0: 0,
+    pi05: Math.round(suites.reduce((a, s) => a + (s.pi05_pos + s.pi05_task) / 2, 0) / suites.length),
+    agent: Math.round(suites.reduce((a, s) => a + (s.agent_pos + s.agent_task) / 2, 0) / suites.length),
+  };
+
+  const methods = [
+    { key: "openVLA", label: "OpenVLA",    color: "#d0d0d0" },
+    { key: "pi0",     label: "\u03C0\u2080",         color: "#c0c0c0" },
+    { key: "pi05",    label: "\u03C0\u2080.\u2085",       color: "#888" },
+    { key: "agent",   label: "CaP-Agent0", color: "#76b900" },
+  ];
+
+  /* ---- SVG setup ---- */
+  const totalH = 290;
+  const margin = { top: 36, right: 20, bottom: 36, left: 20 };
+  const cw = container.clientWidth;
+  const width = cw - margin.left - margin.right;
+  const height = totalH - margin.top - margin.bottom;
+
+  const svg = d3.select(container)
+    .append("svg")
+    .attr("width", cw)
+    .attr("height", totalH);
+
+  const g = svg.append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  /* ---- Layout: left (overall avg) | divider | right (per-suite) ---- */
+  const labelColW = 80;                       // fixed label column
+  const leftBarArea = width * 0.32;            // bar area for left panel
+  const leftW = labelColW + leftBarArea;
+  const dividerX = leftW + 14;
+  const rightX = dividerX + 14;
+  const rightW = width - rightX;
+
+  /* ============ LEFT PANEL: Overall averages ============ */
+  const leftG = g.append("g");
+
+  const barH = 24;
+  const barGap = 6;
+  // Extra gap between trained group (3 bars) and training-free (1 bar)
+  const groupSepExtra = 14;
+  const trainedBlockH = 3 * barH + 2 * barGap;
+  const totalBlockH = trainedBlockH + groupSepExtra + barH;
+  const startY = (height - totalBlockH) / 2;
+
+  // Section heading
+  leftG.append("text")
+    .attr("x", labelColW + leftBarArea / 2).attr("y", startY - 16)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "10px").attr("font-weight", "700")
+    .attr("fill", "#444").attr("letter-spacing", "0.8px")
+    .text("OVERALL AVERAGE");
+
+  // Category labels
+  leftG.append("text")
+    .attr("x", labelColW - 8).attr("y", startY - 4)
+    .attr("text-anchor", "end")
+    .attr("font-size", "8px").attr("font-weight", "700")
+    .attr("fill", "#aaa").attr("letter-spacing", "0.6px")
+    .text("TRAINED ON LIBERO");
+
+  leftG.append("text")
+    .attr("x", labelColW - 8).attr("y", startY + trainedBlockH + groupSepExtra - 4)
+    .attr("text-anchor", "end")
+    .attr("font-size", "8px").attr("font-weight", "700")
+    .attr("fill", "#76b900").attr("letter-spacing", "0.6px")
+    .text("TRAINING-FREE");
+
+  const xScale = d3.scaleLinear().domain([0, 25]).range([0, leftBarArea]);
+
+  methods.forEach((m, i) => {
+    const isAgent = m.key === "agent";
+    const by = i < 3
+      ? startY + i * (barH + barGap)
+      : startY + trainedBlockH + groupSepExtra;
+    const val = overallAvg[m.key];
+
+    // Method label — right-aligned to fixed column
+    leftG.append("text")
+      .attr("x", labelColW - 8).attr("y", by + barH / 2)
+      .attr("text-anchor", "end").attr("dominant-baseline", "central")
+      .attr("font-size", "11px").attr("font-weight", isAgent ? "700" : "600")
+      .attr("fill", isAgent ? "#4a7a00" : "#666")
+      .text(m.label);
+
+    // Bar (all bars start at the same x)
+    const barX = labelColW;
+    if (val === 0) {
+      leftG.append("rect")
+        .attr("x", barX).attr("y", by)
+        .attr("width", 2).attr("height", barH)
+        .attr("fill", m.color);
+      leftG.append("text")
+        .attr("x", barX + 10).attr("y", by + barH / 2)
+        .attr("dominant-baseline", "central")
+        .attr("font-size", "11px").attr("font-weight", "700")
+        .attr("fill", "#ccc")
+        .text("0%");
+    } else {
+      leftG.append("rect")
+        .attr("x", barX).attr("y", by)
+        .attr("width", xScale(val)).attr("height", barH)
+        .attr("fill", m.color);
+      leftG.append("text")
+        .attr("x", barX + xScale(val) + 6).attr("y", by + barH / 2)
+        .attr("dominant-baseline", "central")
+        .attr("font-size", "11px").attr("font-weight", "700")
+        .attr("fill", isAgent ? "#4a7a00" : "#555")
+        .text(val + "%");
+    }
+  });
+
+  /* ---- Separator between trained group and CaP-Agent0 ---- */
+  leftG.append("line")
+    .attr("x1", labelColW).attr("x2", labelColW + leftBarArea)
+    .attr("y1", startY + trainedBlockH + groupSepExtra / 2)
+    .attr("y2", startY + trainedBlockH + groupSepExtra / 2)
+    .attr("stroke", "#e8e8e8").attr("stroke-width", 1)
+    .attr("stroke-dasharray", "4,3");
+
+  /* ---- Vertical divider ---- */
+  g.append("line")
+    .attr("x1", dividerX).attr("x2", dividerX)
+    .attr("y1", startY - 20).attr("y2", startY + totalBlockH + 16)
+    .attr("stroke", "#e0e0e0").attr("stroke-width", 1);
+
+  /* ============ RIGHT PANEL: Per-suite breakdown ============ */
+  const rightG = g.append("g").attr("transform", `translate(${rightX}, 0)`);
+
+  // Heading
+  rightG.append("text")
+    .attr("x", rightW / 2).attr("y", startY - 16)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "10px").attr("font-weight", "700")
+    .attr("fill", "#444").attr("letter-spacing", "0.8px")
+    .text("BY TASK SUITE");
+
+  // Chart area for vertical grouped bars
+  const chartTop = startY + 4;
+  const chartBottom = startY + totalBlockH - 4;
+  const chartH = chartBottom - chartTop;
+
+  const yAxisLabelW = 28;                      // space for "25%" etc.
+  const chartLeft = yAxisLabelW;
+  const chartRight = rightW - 4;
+  const chartInnerW = chartRight - chartLeft;
+
+  const suiteNames = suiteData.map(s => s.name);
+  const xSuite = d3.scaleBand()
+    .domain(suiteNames).range([chartLeft, chartRight]).paddingInner(0.3).paddingOuter(0.1);
+
+  const yMax = 25;
+  const yScale = d3.scaleLinear().domain([0, yMax]).range([chartBottom, chartTop]);
+
+  // Y-axis grid lines + labels
+  [0, 5, 10, 15, 20, 25].forEach(v => {
+    rightG.append("line")
+      .attr("x1", chartLeft).attr("x2", chartRight)
+      .attr("y1", yScale(v)).attr("y2", yScale(v))
+      .attr("stroke", v === 0 ? "#d0d0d0" : "#f0f0f0")
+      .attr("stroke-width", v === 0 ? 0.8 : 0.5);
+    if (v > 0) {
+      rightG.append("text")
+        .attr("x", chartLeft - 4).attr("y", yScale(v))
+        .attr("text-anchor", "end").attr("dominant-baseline", "central")
+        .attr("font-size", "9px").attr("fill", "#bbb")
+        .text(v + "%");
+    }
+  });
+
+  // Legend (top-right of chart area)
+  const legendItems = [
+    { label: "\u03C0\u2080.\u2085", color: "#888" },
+    { label: "CaP-Agent0", color: "#76b900" },
+  ];
+  const legendG = rightG.append("g")
+    .attr("transform", `translate(${chartRight - 120}, ${chartTop - 2})`);
+  legendItems.forEach((item, i) => {
+    const lx = i * 68;
+    legendG.append("rect")
+      .attr("x", lx).attr("y", 0).attr("width", 10).attr("height", 10)
+      .attr("fill", item.color);
+    legendG.append("text")
+      .attr("x", lx + 14).attr("y", 9)
+      .attr("font-size", "9px").attr("font-weight", "600").attr("fill", "#555")
+      .text(item.label);
+  });
+
+  // Bars per suite
+  const barMethods = [
+    { key: "pi05",  color: "#888" },
+    { key: "agent", color: "#76b900" },
+  ];
+  const bw = xSuite.bandwidth() / (barMethods.length + 0.4);
+
+  suiteData.forEach(suite => {
+    const sx = xSuite(suite.name);
+
+    barMethods.forEach((m, mi) => {
+      const val = suite[m.key];
+      const bx = sx + mi * bw + bw * 0.15;
+      const w = bw * 0.85;
+
+      rightG.append("rect")
+        .attr("x", bx).attr("y", yScale(val))
+        .attr("width", w).attr("height", yScale(0) - yScale(val))
+        .attr("fill", m.color);
+
+      // Value label on top
+      if (val > 0) {
+        rightG.append("text")
+          .attr("x", bx + w / 2).attr("y", yScale(val) - 4)
+          .attr("text-anchor", "middle")
+          .attr("font-size", "9px").attr("font-weight", "700")
+          .attr("fill", m.key === "agent" ? "#4a7a00" : "#666")
+          .text(val + "%");
+      }
+    });
+
+    // Suite label below baseline
+    const shortName = suite.name.replace("libero-", "");
+    rightG.append("text")
+      .attr("x", sx + xSuite.bandwidth() / 2)
+      .attr("y", chartBottom + 14)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "10px").attr("font-weight", "600").attr("fill", "#555")
+      .text(shortName);
+  });
+
+  // Footnote below right panel
+  rightG.append("text")
+    .attr("x", chartLeft + chartInnerW / 2)
+    .attr("y", chartBottom + 30)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "8px").attr("fill", "#bbb").attr("font-style", "italic")
+    .text("OpenVLA and \u03C0\u2080 score 0% on all suites (omitted)");
+}
+
+/* ==========================================
    Initialize all charts
    ========================================== */
 
 function initAllCharts() {
   initTimelineChart();
   initHighlightFigure1();
+  initHighlightFigure2VLA();
   initHighlightFigure2();
 }
 

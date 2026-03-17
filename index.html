@@ -288,11 +288,12 @@
       <div class="highlight-card">
         <div class="highlight-text">
           <div class="highlight-number">1</div>
-          <h3 class="highlight-title">Frontier models achieve non-zero success on today's robotics benchmarks</h3>
+          <h3 class="highlight-title">Frontier models achieve meaningful zero-shot success on robotic manipulation</h3>
           <p class="highlight-desc">
-            Large language and vision-language models can directly generate executable robot manipulation code
-            with meaningful success rates across multiple tasks — without any task-specific training or fine-tuning.
-            The best model achieves over 30% average success rate across all tasks.
+            Without any task-specific training, today's best frontier models can directly generate executable robot control
+            code and achieve over 30% average success — a sharp contrast to the prior belief that only specially trained
+            models (VLAs) can perform manipulation. Yet a 56-point gap to human performance remains, marking this as
+            one of AI's most important open challenges.
           </p>
         </div>
         <div class="highlight-figure" id="highlight-fig-1">
@@ -304,15 +305,17 @@
       <div class="highlight-card">
         <div class="highlight-text">
           <div class="highlight-number">2</div>
-          <h3 class="highlight-title">VLM Agents zero-shot on manipulation tasks where specialized VLAs cannot</h3>
+          <h3 class="highlight-title">Training-free CaP-Agent0 outperforms state-of-the-art VLAs on perturbed tasks</h3>
           <p class="highlight-desc">
-            Vision-language model agents, using only natural language prompts and visual feedback, can solve
-            manipulation tasks that state-of-the-art vision-language-action models (e.g., Pi 0.5) fail on entirely.
-            This highlights the surprising generality of code-generation approaches over end-to-end learned policies.
+            On LIBERO-PRO — 30 manipulation tasks with position and instruction perturbations — state-of-the-art
+            Vision-Language-Action models (OpenVLA, &pi;<sub>0</sub>) score <strong>0% across the board</strong>.
+            Even the best VLA (&pi;<sub>0.5</sub>) reaches only 13% average success. CaP-Agent0, a training-free
+            coding agent, achieves <strong>18% without any task-specific training</strong>, demonstrating that
+            code-generation agents generalize where end-to-end learned policies break down.
           </p>
         </div>
         <div class="highlight-figure" id="highlight-fig-2">
-          <span class="highlight-figure-placeholder">Figure coming soon — VLM vs VLA comparison</span>
+          <span class="highlight-figure-placeholder">Loading chart...</span>
         </div>
       </div>
 
