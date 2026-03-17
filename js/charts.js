@@ -937,6 +937,170 @@ function initHighlightFigure2VLA() {
 }
 
 /* ==========================================
+   Highlight Figure 3 — CaP-RL Post-Training
+   Data from Table 4 in the paper
+   ========================================== */
+
+function initHighlightFigure3() {
+  const container = document.getElementById("highlight-fig-3");
+  if (!container) return;
+  container.innerHTML = "";
+
+  /* Table 4 data: Impact of RL Post-Training in Sim and Real */
+  const simTasks = [
+    { name: "Cube Lift",  human: 93, base: 25, rl: 80 },
+    { name: "Cube Stack", human: 73, base: 4,  rl: 44 },
+    { name: "Spill Wipe", human: 100, base: 30, rl: 93 },
+  ];
+  const realTasks = [
+    { name: "Cube Lift",  human: 92, base: 24, rl: 84 },
+    { name: "Cube Stack", human: 84, base: 12, rl: 76 },
+  ];
+
+  const methods = [
+    { key: "base", label: "Base (7B)",  color: "#d0d0d0" },
+    { key: "rl",   label: "w/ CaP-RL",  color: "#76b900" },
+    { key: "human", label: "Human",      color: "#8c9bab" },
+  ];
+
+  /* ---- SVG setup ---- */
+  const totalH = 290;
+  const margin = { top: 36, right: 16, bottom: 30, left: 20 };
+  const cw = container.clientWidth;
+  const width = cw - margin.left - margin.right;
+  const height = totalH - margin.top - margin.bottom;
+
+  const svg = d3.select(container)
+    .append("svg")
+    .attr("width", cw)
+    .attr("height", totalH);
+
+  const g = svg.append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  /* ---- Layout: left (sim) | divider | right (real) ---- */
+  const dividerGap = 28;
+  const leftW = (width - dividerGap) * 0.58;
+  const rightX = leftW + dividerGap;
+  const rightW = width - rightX;
+
+  /* ---- Shared legend at top ---- */
+  const legendG = g.append("g").attr("transform", `translate(${width / 2 - 120}, -20)`);
+  methods.forEach((m, i) => {
+    const lx = i * 82;
+    legendG.append("rect")
+      .attr("x", lx).attr("y", 0).attr("width", 10).attr("height", 10)
+      .attr("fill", m.color).attr("opacity", m.key === "base" ? 0.6 : 1);
+    legendG.append("text")
+      .attr("x", lx + 14).attr("y", 9)
+      .attr("font-size", "10px").attr("font-weight", "600").attr("fill", "#555")
+      .text(m.label);
+  });
+
+  /* ---- Helper: draw a grouped bar panel ---- */
+  function drawPanel(parentG, tasks, panelW, title, subtitle) {
+    const yAxisW = 30;
+    const chartLeft = yAxisW;
+    const chartRight = panelW - 4;
+    const chartInnerW = chartRight - chartLeft;
+    const chartTop = 16;
+    const chartBottom = height - 16;
+
+    // Title
+    parentG.append("text")
+      .attr("x", chartLeft + chartInnerW / 2).attr("y", 4)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "11px").attr("font-weight", "700")
+      .attr("fill", "#333").attr("letter-spacing", "0.5px")
+      .text(title);
+
+    if (subtitle) {
+      parentG.append("text")
+        .attr("x", chartLeft + chartInnerW / 2).attr("y", 16)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "8px").attr("font-weight", "600")
+        .attr("fill", "#999")
+        .text(subtitle);
+    }
+
+    const yScale = d3.scaleLinear().domain([0, 100]).range([chartBottom, chartTop + 10]);
+    const xBand = d3.scaleBand()
+      .domain(tasks.map(t => t.name))
+      .range([chartLeft, chartRight])
+      .paddingInner(0.2).paddingOuter(0.08);
+
+    // Y grid
+    [25, 50, 75, 100].forEach(v => {
+      parentG.append("line")
+        .attr("x1", chartLeft).attr("x2", chartRight)
+        .attr("y1", yScale(v)).attr("y2", yScale(v))
+        .attr("stroke", "#f0f0f0").attr("stroke-width", 0.5);
+      parentG.append("text")
+        .attr("x", chartLeft - 4).attr("y", yScale(v))
+        .attr("text-anchor", "end").attr("dominant-baseline", "central")
+        .attr("font-size", "9px").attr("fill", "#bbb")
+        .text(v + "%");
+    });
+
+    // Baseline at 0
+    parentG.append("line")
+      .attr("x1", chartLeft).attr("x2", chartRight)
+      .attr("y1", yScale(0)).attr("y2", yScale(0))
+      .attr("stroke", "#d0d0d0").attr("stroke-width", 0.8);
+
+    // Bars
+    const nMethods = methods.length;
+    tasks.forEach(task => {
+      const tx = xBand(task.name);
+      const bw = xBand.bandwidth() / (nMethods + 0.4);
+
+      methods.forEach((m, mi) => {
+        const val = task[m.key];
+        const bx = tx + mi * bw + bw * 0.15;
+        const w = bw * 0.8;
+
+        parentG.append("rect")
+          .attr("x", bx).attr("y", yScale(val))
+          .attr("width", w).attr("height", yScale(0) - yScale(val))
+          .attr("fill", m.color)
+          .attr("opacity", m.key === "base" ? 0.6 : 1);
+
+        // Value on top
+        parentG.append("text")
+          .attr("x", bx + w / 2).attr("y", yScale(val) - 3)
+          .attr("text-anchor", "middle")
+          .attr("font-size", "9px").attr("font-weight", "700")
+          .attr("fill", m.key === "rl" ? "#4a7a00" : m.key === "human" ? "#7a8999" : "#aaa")
+          .text(val + "%");
+      });
+
+      // Task label
+      const shortName = task.name.replace("Cube ", "").replace("Spill ", "");
+      parentG.append("text")
+        .attr("x", tx + xBand.bandwidth() / 2)
+        .attr("y", chartBottom + 12)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "10px").attr("font-weight", "600").attr("fill", "#555")
+        .text(task.name);
+    });
+  }
+
+  /* ---- Left panel: Simulation ---- */
+  const leftG = g.append("g");
+  drawPanel(leftG, simTasks, leftW, "SIMULATION", "(N = 100 trials)");
+
+  /* ---- Vertical divider ---- */
+  g.append("line")
+    .attr("x1", leftW + dividerGap / 2).attr("x2", leftW + dividerGap / 2)
+    .attr("y1", 0).attr("y2", height)
+    .attr("stroke", "#e0e0e0").attr("stroke-width", 1);
+
+  /* ---- Right panel: Real World ---- */
+  const rightG = g.append("g").attr("transform", `translate(${rightX}, 0)`);
+  drawPanel(rightG, realTasks, rightW, "REAL WORLD", "(N = 25 trials)");
+}
+
+/* ==========================================
    Initialize all charts
    ========================================== */
 
@@ -944,6 +1108,7 @@ function initAllCharts() {
   initTimelineChart();
   initHighlightFigure1();
   initHighlightFigure2VLA();
+  initHighlightFigure3();
   initHighlightFigure2();
 }
 

@@ -323,15 +323,17 @@
       <div class="highlight-card">
         <div class="highlight-text">
           <div class="highlight-number">3</div>
-          <h3 class="highlight-title">Post-training makes VLM agents better at robotics tasks</h3>
+          <h3 class="highlight-title">RL post-training on code dramatically boosts robot performance — and transfers sim-to-real</h3>
           <p class="highlight-desc">
-            Models that undergo additional post-training (e.g., RLHF, instruction tuning) show consistent improvements
-            in their ability to generate correct robot manipulation code. This suggests that general reasoning improvements
-            directly transfer to embodied task performance.
+            Using CaP-RL, we apply reinforcement learning with environment rewards directly on the coding agent.
+            A 7B model (Qwen 2.5 Coder) jumps from <strong>20% to 72% average success</strong> in simulation after
+            just 50 training iterations. The learned policies transfer to a real Franka Emika robot with
+            <strong>minimal sim-to-real gap</strong> — reaching 84% on cube lifting and 76% on cube stacking,
+            approaching human expert performance.
           </p>
         </div>
         <div class="highlight-figure" id="highlight-fig-3">
-          <span class="highlight-figure-placeholder">Figure coming soon — Post-training comparison</span>
+          <span class="highlight-figure-placeholder">Loading chart...</span>
         </div>
       </div>
 
