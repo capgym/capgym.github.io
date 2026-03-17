@@ -874,7 +874,7 @@ function initHighlightFigure2VLA() {
     { label: "CaP-Agent0", color: "#76b900" },
   ];
   const legendG = rightG.append("g")
-    .attr("transform", `translate(${chartRight - 120}, ${chartTop - 2})`);
+    .attr("transform", `translate(${chartRight - 120}, ${chartTop - 16})`);
   legendItems.forEach((item, i) => {
     const lx = i * 68;
     legendG.append("rect")
