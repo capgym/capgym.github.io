@@ -74,13 +74,15 @@ function injectDynamicContent() {
   // Authors
   const authorsEl = document.getElementById("authors-list");
   if (authorsEl) {
+    const breakAfter = cfg.authors.findIndex(a => a.name === "Guanzhi Wang");
     authorsEl.innerHTML = cfg.authors.map((a, i) => {
       const comma = i < cfg.authors.length - 1 ? "," : "";
       const star = a.equalContrib ? '<span class="equal-contrib">*</span>' : "";
       const affNums = a.affiliations.join(",");
+      const lineBreak = i === breakAfter ? '<span class="author-line-break"></span>' : "";
       return `<span class="author">
         <a href="${a.url}" target="_blank" rel="noopener">${a.name}</a>${star}<span class="affiliation-nums">${affNums}</span>${comma}
-      </span>`;
+      </span>${lineBreak}`;
     }).join("\n");
   }
 
@@ -309,17 +311,28 @@ function initDemoModal() {
     modalVideo.removeAttribute("src");
   }
 
+  const eyeSvg = `<svg class="demo-video-hover-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+
   document.querySelectorAll(".demo-video-card").forEach(card => {
-    // Auto-inject code badge for cards with source code
-    if (card.getAttribute("data-code-src")) {
-      const wrap = card.querySelector(".demo-video-wrap");
-      if (wrap && !wrap.querySelector(".demo-code-badge")) {
-        const badge = document.createElement("span");
-        badge.className = "demo-code-badge";
-        badge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Code`;
-        wrap.appendChild(badge);
-      }
+    const wrap = card.querySelector(".demo-video-wrap");
+    const hasCode = !!card.getAttribute("data-code-src");
+
+    // Hover overlay
+    if (wrap) {
+      const overlay = document.createElement("div");
+      overlay.className = "demo-video-hover";
+      overlay.innerHTML = `${eyeSvg}<span class="demo-video-hover-text">${hasCode ? "View Details & Code" : "View Details"}</span>`;
+      wrap.appendChild(overlay);
     }
+
+    // Auto-inject code badge
+    if (hasCode && wrap && !wrap.querySelector(".demo-code-badge")) {
+      const badge = document.createElement("span");
+      badge.className = "demo-code-badge";
+      badge.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Code`;
+      wrap.appendChild(badge);
+    }
+
     card.addEventListener("click", () => openModal(card));
   });
 
