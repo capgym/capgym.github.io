@@ -958,7 +958,7 @@ function initHighlightFigure3() {
   ];
 
   const methods = [
-    { key: "base", label: "Base (7B)",  color: "#d0d0d0" },
+    { key: "base", label: "Base (7B)",  color: "#888" },
     { key: "rl",   label: "w/ CaP-RL",  color: "#76b900" },
     { key: "human", label: "Human",      color: "#8c9bab" },
   ];
