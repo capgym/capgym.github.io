@@ -745,7 +745,7 @@ function initHighlightFigure2VLA() {
 
   // Section heading
   leftG.append("text")
-    .attr("x", labelColW + leftBarArea / 2).attr("y", startY - 16)
+    .attr("x", labelColW + leftBarArea / 2).attr("y", startY - 24)
     .attr("text-anchor", "middle")
     .attr("font-size", "10px").attr("font-weight", "700")
     .attr("fill", "#444").attr("letter-spacing", "0.8px")
@@ -829,7 +829,7 @@ function initHighlightFigure2VLA() {
 
   // Heading
   rightG.append("text")
-    .attr("x", rightW / 2).attr("y", startY - 16)
+    .attr("x", rightW / 2).attr("y", startY - 24)
     .attr("text-anchor", "middle")
     .attr("font-size", "10px").attr("font-weight", "700")
     .attr("fill", "#444").attr("letter-spacing", "0.8px")
@@ -874,7 +874,7 @@ function initHighlightFigure2VLA() {
     { label: "CaP-Agent0", color: "#76b900" },
   ];
   const legendG = rightG.append("g")
-    .attr("transform", `translate(${chartRight - 120}, ${chartTop - 16})`);
+    .attr("transform", `translate(${chartLeft + (chartInnerW - 136) / 2}, ${chartTop - 16})`);
   legendItems.forEach((item, i) => {
     const lx = i * 68;
     legendG.append("rect")
