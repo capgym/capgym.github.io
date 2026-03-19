@@ -569,105 +569,222 @@ async function initHighlightFigure1() {
 }
 
 /* ==========================================
-   Highlight Figure 2 — Model Size vs Performance
-   (Abstraction analysis: smaller models catch up)
+   Highlight Figure 4 — Abstraction vs Performance (Figures 2 & 3)
+   Two-panel: task success + compilation success across S4→S1
    ========================================== */
 
-async function initHighlightFigure2() {
+function initHighlightFigure4() {
   const container = document.getElementById("highlight-fig-4");
   if (!container) return;
   container.innerHTML = "";
 
-  const response = await fetch("data/model_data.json");
-  const data = await response.json();
-
-  // Approximate model sizes (for visualization)
-  const modelSizes = {
-    "GPT-5.2": 1800, "GPT-5.1": 1500, "Gemini 3 Pro": 1200,
-    "Opus 4.5": 1000, "o1": 900, "o4-mini": 200,
-    "Haiku 4.5": 150, "GPT-OSS-120B": 120, "GPT-OSS-20B": 20,
-    "Qwen3-235B": 235, "Kimi K2": 235, "DeepSeek 3.1": 600,
+  /* Data from Figures 2 & 3 (eval_matrix_csv, averaged across 6 tasks × models) */
+  const levels = ["S4", "S3", "S2", "S1"];
+  const successData = {
+    closed: [18.2, 21.4, 36.5, 56.9],
+    open:   [ 9.9, 12.5, 30.1, 45.0],
+  };
+  const compileData = {
+    closed: [88.2, 88.3, 98.8, 99.7],
+    open:   [57.6, 64.9, 93.2, 92.9],
   };
 
-  const modelsWithSize = data.models
-    .filter(m => modelSizes[m.displayName])
-    .map(m => ({ ...m, size: modelSizes[m.displayName] }));
+  /* Top/bottom individual model lines */
+  const modelLines = [
+    { name: "Gemini 3 Pro", success: [32.3, 28.3, 45.7, 65.7], compile: [84.3, 82.5, 98.8, 100], group: "closed" },
+    { name: "Opus 4.5",     success: [23.8, 33.3, 41.5, 59.2], compile: [98.8, 92.0, 98.7, 100], group: "closed" },
+    { name: "GPT-OSS-120B", success: [19.8, 25.5, 36.3, 60.5], compile: [81.8, 87.7, 99.3, 99.8], group: "closed" },
+    { name: "Qwen-235B",    success: [ 4.0, 10.3, 25.3, 41.2], compile: [13.3, 48.8, 94.2, 95.7], group: "open" },
+    { name: "Kimi K2",      success: [ 5.2,  5.0, 24.2, 31.2], compile: [50.0, 58.3, 85.8, 85.0], group: "open" },
+    { name: "DeepSeek 3.1", success: [12.8, 11.2, 30.7, 41.2], compile: [73.2, 69.8, 91.2, 87.7], group: "open" },
+  ];
 
-  const margin = { top: 20, right: 20, bottom: 40, left: 50 };
-  const width = container.clientWidth - margin.left - margin.right;
-  const height = 220 - margin.top - margin.bottom;
+  /* ---- SVG setup ---- */
+  const totalH = 300;
+  const margin = { top: 20, right: 16, bottom: 46, left: 20 };
+  const cw = container.clientWidth;
+  const width = cw - margin.left - margin.right;
+  const height = totalH - margin.top - margin.bottom;
 
   const svg = d3.select(container)
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom);
+    .attr("width", cw)
+    .attr("height", totalH);
 
   const g = svg.append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  const x = d3.scaleLog()
-    .domain([10, 2000])
-    .range([0, width]);
+  /* ---- Layout: left (success) | divider | right (compilation) ---- */
+  const dividerGap = 28;
+  const leftW = (width - dividerGap) * 0.5;
+  const rightX = leftW + dividerGap;
+  const rightW = width - rightX;
 
-  const y = d3.scaleLinear()
-    .domain([0, d3.max(modelsWithSize, d => d.avgSuccessRate) * 1.2])
-    .range([height, 0]);
+  /* ---- Helper: draw a line chart panel ---- */
+  function drawPanel(parentG, panelW, dataObj, modelData, title, yLabel, yMax) {
+    const yAxisW = 34;
+    const chartLeft = yAxisW;
+    const chartRight = panelW - 4;
+    const chartInnerW = chartRight - chartLeft;
+    const chartTop = 20;
+    const chartBottom = height - 16;
 
-  // Grid
-  g.selectAll(".grid-line")
-    .data(y.ticks(4))
-    .enter()
-    .append("line")
-    .attr("x1", 0).attr("x2", width)
-    .attr("y1", d => y(d)).attr("y2", d => y(d))
-    .attr("stroke", "#e8eaed").attr("stroke-width", 0.5);
+    // Title
+    parentG.append("text")
+      .attr("x", chartLeft + chartInnerW / 2).attr("y", 6)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "11px").attr("font-weight", "700")
+      .attr("fill", "#333").attr("letter-spacing", "0.5px")
+      .text(title);
 
-  // Scatter points
-  g.selectAll(".point")
-    .data(modelsWithSize)
-    .enter()
-    .append("circle")
-    .attr("cx", d => x(d.size))
-    .attr("cy", d => y(d.avgSuccessRate))
-    .attr("r", 6)
-    .attr("fill", d => data.companyColors[d.company] || "#76b900")
-    .attr("stroke", "#fff")
-    .attr("stroke-width", 1.5)
-    .attr("opacity", 0.85);
+    const yScale = d3.scaleLinear().domain([0, yMax]).range([chartBottom, chartTop]);
+    const xScale = d3.scalePoint()
+      .domain(levels)
+      .range([chartLeft + 16, chartRight - 16])
+      .padding(0);
 
-  // Labels
-  g.selectAll(".point-label")
-    .data(modelsWithSize)
-    .enter()
-    .append("text")
-    .attr("x", d => x(d.size))
-    .attr("y", d => y(d.avgSuccessRate) - 10)
-    .attr("text-anchor", "middle")
-    .attr("font-size", "13px")
-    .attr("fill", "#4a4a6a")
-    .text(d => d.displayName);
+    // Y grid + labels
+    [25, 50, 75, 100].forEach(v => {
+      if (v > yMax) return;
+      parentG.append("line")
+        .attr("x1", chartLeft).attr("x2", chartRight)
+        .attr("y1", yScale(v)).attr("y2", yScale(v))
+        .attr("stroke", "#f0f0f0").attr("stroke-width", 0.5);
+      parentG.append("text")
+        .attr("x", chartLeft - 4).attr("y", yScale(v))
+        .attr("text-anchor", "end").attr("dominant-baseline", "central")
+        .attr("font-size", "9px").attr("fill", "#bbb")
+        .text(v + "%");
+    });
 
-  // X axis
-  g.append("g")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x).ticks(4, "~s").tickFormat(d => d >= 1000 ? (d/1000) + "T" : d + "B"))
-    .call(g => g.select(".domain").attr("stroke", "#d0d4da"))
-    .call(g => g.selectAll(".tick text").attr("fill", "#8888a0").attr("font-size", "12px"));
+    // Baseline
+    parentG.append("line")
+      .attr("x1", chartLeft).attr("x2", chartRight)
+      .attr("y1", yScale(0)).attr("y2", yScale(0))
+      .attr("stroke", "#d0d0d0").attr("stroke-width", 0.8);
 
-  g.append("text")
-    .attr("x", width / 2)
-    .attr("y", height + 35)
-    .attr("text-anchor", "middle")
-    .attr("fill", "#4a4a6a")
-    .attr("font-size", "13px")
-    .text("Model Size (approx. params)");
+    // X-axis labels
+    levels.forEach(lvl => {
+      parentG.append("text")
+        .attr("x", xScale(lvl)).attr("y", chartBottom + 14)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "10px").attr("font-weight", "600").attr("fill", "#555")
+        .text(lvl);
+    });
 
-  // Y axis
-  g.append("g")
-    .call(d3.axisLeft(y).ticks(4).tickFormat(d => d + "%"))
-    .call(g => g.select(".domain").remove())
-    .call(g => g.selectAll(".tick line").remove())
-    .call(g => g.selectAll(".tick text").attr("fill", "#8888a0").attr("font-size", "12px"));
+    // Abstraction arrow
+    parentG.append("text")
+      .attr("x", chartLeft + chartInnerW / 2).attr("y", chartBottom + 26)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "8px").attr("fill", "#aaa")
+      .text("← low abstraction    high abstraction →");
+
+    // Line helper
+    const line = d3.line()
+      .x((d, i) => xScale(levels[i]))
+      .y(d => yScale(d));
+
+    // Individual model lines (faint)
+    const modelColors = {
+      closed: ["#4daf4a", "#377eb8", "#984ea3"],
+      open: ["#e41a1c", "#ff7f00", "#a65628"],
+    };
+    modelData.forEach((m, mi) => {
+      const vals = dataObj === successData ? m.success : m.compile;
+      const colors = modelColors[m.group];
+      const ci = m.group === "closed" ? mi : mi - 3;
+      parentG.append("path")
+        .datum(vals)
+        .attr("d", line)
+        .attr("fill", "none")
+        .attr("stroke", colors[ci % colors.length])
+        .attr("stroke-width", 1.2)
+        .attr("stroke-dasharray", m.group === "open" ? "3,3" : "5,3")
+        .attr("opacity", 0.4);
+
+      // Label at rightmost point
+      const lastVal = vals[vals.length - 1];
+      const shortName = m.name;
+      parentG.append("text")
+        .attr("x", xScale(levels[levels.length - 1]) + 4)
+        .attr("y", yScale(lastVal))
+        .attr("dominant-baseline", "central")
+        .attr("font-size", "7px").attr("fill", colors[ci % colors.length])
+        .attr("opacity", 0.6)
+        .text(shortName);
+    });
+
+    // Group average lines (bold)
+    const groupStyles = [
+      { key: "closed", color: "#1f77b4", label: "Closed Source" },
+      { key: "open",   color: "#ff7f0e", label: "Open Source" },
+    ];
+    groupStyles.forEach(gs => {
+      const vals = dataObj[gs.key];
+      parentG.append("path")
+        .datum(vals)
+        .attr("d", line)
+        .attr("fill", "none")
+        .attr("stroke", gs.color)
+        .attr("stroke-width", 2.5);
+
+      // Dots
+      vals.forEach((v, i) => {
+        parentG.append("circle")
+          .attr("cx", xScale(levels[i]))
+          .attr("cy", yScale(v))
+          .attr("r", 4)
+          .attr("fill", gs.color)
+          .attr("stroke", "#fff")
+          .attr("stroke-width", 1.2);
+      });
+
+      // Value labels on first and last points
+      [0, 3].forEach(i => {
+        parentG.append("text")
+          .attr("x", xScale(levels[i]))
+          .attr("y", yScale(vals[i]) - 8)
+          .attr("text-anchor", "middle")
+          .attr("font-size", "9px").attr("font-weight", "700")
+          .attr("fill", gs.color)
+          .text(Math.round(vals[i]) + "%");
+      });
+    });
+  }
+
+  /* ---- Left panel: Task Success Rate (Figure 2) ---- */
+  const leftG = g.append("g");
+  drawPanel(leftG, leftW, successData, modelLines, "TASK SUCCESS RATE", "Success Rate (%)", 100);
+
+  /* ---- Vertical divider ---- */
+  g.append("line")
+    .attr("x1", leftW + dividerGap / 2).attr("x2", leftW + dividerGap / 2)
+    .attr("y1", 0).attr("y2", height)
+    .attr("stroke", "#e0e0e0").attr("stroke-width", 1);
+
+  /* ---- Right panel: Compilation Success (Figure 3) ---- */
+  const rightG = g.append("g").attr("transform", `translate(${rightX},0)`);
+  drawPanel(rightG, rightW, compileData, modelLines, "CODE COMPILATION SUCCESS", "Compilation (%)", 105);
+
+  /* ---- Shared legend at bottom ---- */
+  const legendG = g.append("g").attr("transform", `translate(${width / 2 - 80}, ${height + 20})`);
+  const legendItems = [
+    { label: "Closed Source", color: "#1f77b4", dash: false },
+    { label: "Open Source",   color: "#ff7f0e", dash: false },
+  ];
+  legendItems.forEach((item, i) => {
+    const lx = i * 100;
+    legendG.append("line")
+      .attr("x1", lx).attr("x2", lx + 16).attr("y1", 5).attr("y2", 5)
+      .attr("stroke", item.color).attr("stroke-width", 2.5);
+    legendG.append("circle")
+      .attr("cx", lx + 8).attr("cy", 5).attr("r", 3)
+      .attr("fill", item.color);
+    legendG.append("text")
+      .attr("x", lx + 20).attr("y", 9)
+      .attr("font-size", "10px").attr("font-weight", "600").attr("fill", "#555")
+      .text(item.label);
+  });
 }
 
 /* ==========================================
@@ -1109,7 +1226,7 @@ function initAllCharts() {
   initHighlightFigure1();
   initHighlightFigure2VLA();
   initHighlightFigure3();
-  initHighlightFigure2();
+  initHighlightFigure4();
 }
 
 // Resize handler

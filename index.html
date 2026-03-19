@@ -341,11 +341,13 @@
       <div class="highlight-card">
         <div class="highlight-text">
           <div class="highlight-number">4</div>
-          <h3 class="highlight-title">Smaller models catch up when only abstract reasoning is needed</h3>
+          <h3 class="highlight-title">High-level abstractions boost success — but mask low-level reasoning failures</h3>
           <p class="highlight-desc">
-            While larger models dominate on complex manipulation tasks, the performance gap narrows significantly
-            on tasks that primarily require abstract reasoning rather than low-level control. This indicates that
-            model scale is most critical for fine-grained physical reasoning.
+            Task success rises monotonically as API abstraction increases from raw primitives (S4) to
+            high-level pick-and-place (S1). Yet code compilation stays high even at the lowest level —
+            revealing that the bottleneck is <strong>physical reasoning, not code correctness</strong>.
+            This motivates evaluating agents on <strong>primitive-level performance</strong>, where success
+            requires genuine spatial and control reasoning rather than relying on human-designed abstractions.
           </p>
         </div>
         <div class="highlight-figure" id="highlight-fig-4">
