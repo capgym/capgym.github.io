@@ -964,8 +964,8 @@ function initHighlightFigure3() {
   ];
 
   /* ---- SVG setup ---- */
-  const totalH = 290;
-  const margin = { top: 36, right: 16, bottom: 30, left: 20 };
+  const totalH = 300;
+  const margin = { top: 20, right: 16, bottom: 46, left: 20 };
   const cw = container.clientWidth;
   const width = cw - margin.left - margin.right;
   const height = totalH - margin.top - margin.bottom;
@@ -984,8 +984,8 @@ function initHighlightFigure3() {
   const rightX = leftW + dividerGap;
   const rightW = width - rightX;
 
-  /* ---- Shared legend at top ---- */
-  const legendG = g.append("g").attr("transform", `translate(${width / 2 - 120}, -20)`);
+  /* ---- Shared legend at bottom ---- */
+  const legendG = g.append("g").attr("transform", `translate(${width / 2 - 120}, ${height + 20})`);
   methods.forEach((m, i) => {
     const lx = i * 82;
     legendG.append("rect")
