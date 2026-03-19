@@ -78,17 +78,18 @@ function injectDynamicContent() {
     authorsEl.innerHTML = cfg.authors.map((a, i) => {
       const comma = i < cfg.authors.length - 1 ? "," : "";
       const star = a.equalContrib ? '<span class="equal-contrib">*</span>' : "";
+      const dagger = a.projectLead ? '<span class="project-lead">&dagger;</span>' : "";
       const affNums = a.affiliations.join(",");
       const lineBreak = i === breakAfter ? '<span class="author-line-break"></span>' : "";
       return `<span class="author">
-        <a href="${a.url}" target="_blank" rel="noopener">${a.name}</a>${star}<span class="affiliation-nums">${affNums}</span>${comma}
+        <a href="${a.url}" target="_blank" rel="noopener">${a.name}</a>${star}${dagger}<span class="affiliation-nums">${affNums}</span>${comma}
       </span>${lineBreak}`;
     }).join("\n");
   }
 
   // Equal contribution note
   const equalNote = document.getElementById("equal-note");
-  if (equalNote) equalNote.textContent = "* Equal contribution";
+  if (equalNote) equalNote.innerHTML = "* Equal contribution &nbsp;&nbsp; &dagger; Project co-lead";
 
   // Affiliations
   const affEl = document.getElementById("affiliations-list");

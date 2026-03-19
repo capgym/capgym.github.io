@@ -329,7 +329,8 @@ a:hover {
   border-bottom-color: var(--nvidia-green);
 }
 
-.author .equal-contrib {
+.author .equal-contrib,
+.author .project-lead {
   font-size: 0.85rem;
   vertical-align: super;
   color: var(--nvidia-green);
