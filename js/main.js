@@ -282,6 +282,20 @@ function initDemoModal() {
     modalTitle.textContent = label ? label.textContent : "";
     modalDesc.textContent = caption;
 
+    // Model badge in modal
+    const modalModelBadge = overlay.querySelector(".demo-modal-model-badge");
+    const cardModelBadge = card.querySelector(".demo-model-badge");
+    if (modalModelBadge) {
+      if (cardModelBadge) {
+        modalModelBadge.textContent = cardModelBadge.textContent;
+        modalModelBadge.className = "demo-modal-model-badge " +
+          (cardModelBadge.classList.contains("gemini") ? "gemini" : "claude");
+      } else {
+        modalModelBadge.className = "demo-modal-model-badge";
+        modalModelBadge.textContent = "";
+      }
+    }
+
     // Reset scroll position
     overlay.querySelector(".demo-modal").scrollTop = 0;
 
@@ -334,10 +348,25 @@ function initDemoModal() {
       wrap.appendChild(badge);
     }
 
+    // Model badge for real-world demos
+    const isRealWorldCard = !!card.closest(".demo-gallery");
+    if (isRealWorldCard && wrap) {
+      const labelText = (card.querySelector(".demo-video-label")?.textContent || "").toLowerCase();
+      const geminiTasks = ["embodied reasoning", "cross embodiment", "loco-manipulation", "multimodal reasoning", "language following"];
+      const isGemini = geminiTasks.some(t => labelText.includes(t.toLowerCase()));
+      const badge = document.createElement("span");
+      badge.className = "demo-model-badge " + (isGemini ? "gemini" : "claude");
+      badge.textContent = isGemini ? "Gemini 3 Pro" : "Opus 4.5";
+      wrap.appendChild(badge);
+    }
+
     // Hover: play video; leave: pause and reset to first frame
     const video = card.querySelector(".demo-video");
+    const isRealWorld = !!card.closest(".demo-gallery");
+    const hoverStartTime = isRealWorld ? 4 : 0;
     if (video) {
       card.addEventListener("mouseenter", () => {
+        video.currentTime = hoverStartTime;
         video.play().catch(() => {});
       });
       card.addEventListener("mouseleave", () => {

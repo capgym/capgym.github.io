@@ -884,10 +884,37 @@ a:hover {
   z-index: 1;
 }
 
+.demo-modal-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
 .demo-modal-title {
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.01em;
+}
+
+.demo-modal-model-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.5rem;
+  color: #fff;
+  white-space: nowrap;
+  display: none;
+}
+
+.demo-modal-model-badge.gemini {
+  background: rgba(66, 133, 244, 0.9);
+  display: inline-block;
+}
+
+.demo-modal-model-badge.claude {
+  background: rgba(204, 119, 60, 0.9);
+  display: inline-block;
 }
 
 .demo-modal-close {
@@ -951,6 +978,32 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 0.3rem;
+}
+
+/* Model badge on video thumbnail */
+.demo-model-badge {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.55rem;
+  pointer-events: none;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.demo-model-badge.gemini {
+  background: rgba(66, 133, 244, 0.85);
+}
+
+.demo-model-badge.claude {
+  background: rgba(204, 119, 60, 0.85);
 }
 
 .demo-modal-code {
