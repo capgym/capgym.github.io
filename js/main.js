@@ -89,7 +89,7 @@ function injectDynamicContent() {
 
   // Equal contribution note
   const equalNote = document.getElementById("equal-note");
-  if (equalNote) equalNote.innerHTML = "* Equal contribution &nbsp;&nbsp; &dagger; Project co-lead";
+  if (equalNote) equalNote.innerHTML = "* Equal contribution &nbsp;&nbsp; &dagger; Equal advising";
 
   // Affiliations
   const affEl = document.getElementById("affiliations-list");

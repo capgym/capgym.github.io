@@ -600,8 +600,8 @@ function initHighlightFigure4() {
   ];
 
   /* ---- SVG setup ---- */
-  const totalH = 300;
-  const margin = { top: 20, right: 16, bottom: 46, left: 20 };
+  const totalH = 316;
+  const margin = { top: 20, right: 16, bottom: 56, left: 20 };
   const cw = container.clientWidth;
   const width = cw - margin.left - margin.right;
   const height = totalH - margin.top - margin.bottom;
@@ -663,18 +663,29 @@ function initHighlightFigure4() {
       .attr("y1", yScale(0)).attr("y2", yScale(0))
       .attr("stroke", "#d0d0d0").attr("stroke-width", 0.8);
 
-    // X-axis labels
+    // X-axis labels with descriptors
+    const levelDescriptors = {
+      "S4": "Low-Level",
+      "S3": "w/ Examples",
+      "S2": "High-Level",
+      "S1": "Privileged",
+    };
     levels.forEach(lvl => {
       parentG.append("text")
-        .attr("x", xScale(lvl)).attr("y", chartBottom + 14)
+        .attr("x", xScale(lvl)).attr("y", chartBottom + 12)
         .attr("text-anchor", "middle")
         .attr("font-size", "10px").attr("font-weight", "600").attr("fill", "#555")
         .text(lvl);
+      parentG.append("text")
+        .attr("x", xScale(lvl)).attr("y", chartBottom + 22)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "7px").attr("fill", "#999")
+        .text(levelDescriptors[lvl]);
     });
 
     // Abstraction arrow
     parentG.append("text")
-      .attr("x", chartLeft + chartInnerW / 2).attr("y", chartBottom + 26)
+      .attr("x", chartLeft + chartInnerW / 2).attr("y", chartBottom + 32)
       .attr("text-anchor", "middle")
       .attr("font-size", "8px").attr("fill", "#aaa")
       .text("← low abstraction    high abstraction →");
@@ -684,40 +695,11 @@ function initHighlightFigure4() {
       .x((d, i) => xScale(levels[i]))
       .y(d => yScale(d));
 
-    // Individual model lines (faint)
-    const modelColors = {
-      closed: ["#4daf4a", "#377eb8", "#984ea3"],
-      open: ["#e41a1c", "#ff7f00", "#a65628"],
-    };
-    modelData.forEach((m, mi) => {
-      const vals = dataObj === successData ? m.success : m.compile;
-      const colors = modelColors[m.group];
-      const ci = m.group === "closed" ? mi : mi - 3;
-      parentG.append("path")
-        .datum(vals)
-        .attr("d", line)
-        .attr("fill", "none")
-        .attr("stroke", colors[ci % colors.length])
-        .attr("stroke-width", 1.2)
-        .attr("stroke-dasharray", m.group === "open" ? "3,3" : "5,3")
-        .attr("opacity", 0.4);
-
-      // Label at rightmost point
-      const lastVal = vals[vals.length - 1];
-      const shortName = m.name;
-      parentG.append("text")
-        .attr("x", xScale(levels[levels.length - 1]) + 4)
-        .attr("y", yScale(lastVal))
-        .attr("dominant-baseline", "central")
-        .attr("font-size", "7px").attr("fill", colors[ci % colors.length])
-        .attr("opacity", 0.6)
-        .text(shortName);
-    });
-
-    // Group average lines (bold)
+    // Group average lines + label collection for collision avoidance
+    const pendingLabels = [];
     const groupStyles = [
-      { key: "closed", color: "#1f77b4", label: "Closed Source" },
-      { key: "open",   color: "#ff7f0e", label: "Open Source" },
+      { key: "closed", color: "#76b900", label: "Closed Source" },
+      { key: "open",   color: "#888",    label: "Open Source" },
     ];
     groupStyles.forEach(gs => {
       const vals = dataObj[gs.key];
@@ -739,16 +721,52 @@ function initHighlightFigure4() {
           .attr("stroke-width", 1.2);
       });
 
-      // Value labels on first and last points
+      // Collect value labels for collision avoidance
       [0, 3].forEach(i => {
-        parentG.append("text")
-          .attr("x", xScale(levels[i]))
-          .attr("y", yScale(vals[i]) - 8)
-          .attr("text-anchor", "middle")
-          .attr("font-size", "9px").attr("font-weight", "700")
-          .attr("fill", gs.color)
-          .text(Math.round(vals[i]) + "%");
+        pendingLabels.push({
+          x: xScale(levels[i]),
+          y: yScale(vals[i]) - 8,
+          rawY: vals[i],
+          color: gs.color,
+          text: Math.round(vals[i]) + "%",
+          idx: i,
+        });
       });
+    });
+
+    // Resolve overlapping labels: ensure sufficient vertical gap
+    const minGap = 20;
+    for (const idx of [0, 3]) {
+      const atIdx = pendingLabels.filter(l => l.idx === idx);
+      if (atIdx.length === 2) {
+        // Sort by rawY descending (higher value first)
+        atIdx.sort((a, b) => b.rawY - a.rawY);
+        const pixelGap = Math.abs(yScale(atIdx[0].rawY) - yScale(atIdx[1].rawY));
+        if (pixelGap < minGap) {
+          // Higher value: label above dot
+          atIdx[0].y = yScale(atIdx[0].rawY) - 10;
+          // Lower value: label below dot
+          atIdx[1].y = yScale(atIdx[1].rawY) + 14;
+        } else {
+          // Even with enough pixel gap, nudge labels apart if close
+          const labelGap = atIdx[1].y - atIdx[0].y;
+          if (labelGap < minGap) {
+            const mid = (atIdx[0].y + atIdx[1].y) / 2;
+            atIdx[0].y = mid - minGap / 2;
+            atIdx[1].y = mid + minGap / 2;
+          }
+        }
+      }
+    }
+
+    pendingLabels.forEach(l => {
+      parentG.append("text")
+        .attr("x", l.x)
+        .attr("y", l.y)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "9px").attr("font-weight", "700")
+        .attr("fill", l.color)
+        .text(l.text);
     });
   }
 
@@ -769,8 +787,8 @@ function initHighlightFigure4() {
   /* ---- Shared legend at bottom ---- */
   const legendG = g.append("g").attr("transform", `translate(${width / 2 - 80}, ${height + 20})`);
   const legendItems = [
-    { label: "Closed Source", color: "#1f77b4", dash: false },
-    { label: "Open Source",   color: "#ff7f0e", dash: false },
+    { label: "Closed Source", color: "#76b900", dash: false },
+    { label: "Open Source",   color: "#888",    dash: false },
   ];
   legendItems.forEach((item, i) => {
     const lx = i * 100;
