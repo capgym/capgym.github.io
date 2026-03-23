@@ -105,7 +105,7 @@
       <div class="demo-gallery">
         <div class="demo-video-card fade-in" data-caption="The model intrinsically understands the affordance of stacking order — an embodied reasoning capability. It stacks cubes first before stacking the round apple.">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/agibot_demos/AgiBot Stack Everything.mp4" type="video/mp4">
             </video>
           </div>
@@ -113,7 +113,7 @@
         </div>
         <div class="demo-video-card fade-in" data-caption="CaP-Agent0 generalizes zero-shot across embodiments. Given the same task and properly configured tool APIs, it completes the stacking task on a Franka robot." data-code-src="assets/franka_demos/franka_cross_embodiment_code.py">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/franka_demos/Franka Cross Embodiment.mp4" type="video/mp4">
             </video>
           </div>
@@ -121,7 +121,7 @@
         </div>
         <div class="demo-video-card fade-in" data-caption="The model naturally decomposes a high-level task (take the elevator down) into substeps (push button, lower arm, move into elevator). It also uses advanced programming and mathematical tools (e.g. SciPy RANSAC for plane fitting) to execute the button-pushing.">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/agibot_demos/AgiBot Elevator.mp4" type="video/mp4">
             </video>
           </div>
@@ -129,7 +129,7 @@
         </div>
         <div class="demo-video-card fade-in" data-caption="The model can plan a long-horizon, ordered mechanical search, and execute closed-loop behavior in a multi-turn setting.">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/agibot_demos/AgiBot Mechanical Search 2.mp4" type="video/mp4">
             </video>
           </div>
@@ -137,7 +137,7 @@
         </div>
         <div class="demo-video-card fade-in" data-caption="The model can naturally lift textual context from image observation. It can directly read the math problem posed by cubes, and understand the hinted action (using the other cubes to complete the equation).">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/agibot_demos/AgiBot Math.mp4" type="video/mp4">
             </video>
           </div>
@@ -145,7 +145,7 @@
         </div>
         <div class="demo-video-card fade-in" data-caption="The model can infer additional actions from the observation. It knows to destack the yellow cube first before stacking the red cube on top.">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/agibot_demos/AgiBot Restack.mp4" type="video/mp4">
             </video>
           </div>
@@ -153,7 +153,7 @@
         </div>
         <div class="demo-video-card fade-in" data-caption="The model follows natural language instructions that reference a wide vocabulary of object properties in the physical world. It correctly interprets abstract descriptors (e.g. color, shape) and acts on the right target accordingly.">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/agibot_demos/AgiBot Semantic Reasoning.mp4" type="video/mp4">
             </video>
           </div>
@@ -161,7 +161,7 @@
         </div>
         <div class="demo-video-card fade-in" data-caption="Testing robustness against distractors? We've got a full table of them. Using a verification tool (Molmo 2), the model can effortlessly identify the target in the most cluttered environment.">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/agibot_demos/AgiBot Needle.mp4" type="video/mp4">
             </video>
           </div>
@@ -169,7 +169,7 @@
         </div>
         <div class="demo-video-card fade-in" data-caption="Given only the prompt 'stack the pyramid,' the model identifies each layer by color — blue (large), green (medium), yellow (small) — and uses these color-size associations to reference and manipulate the correct objects, completing the assembly.">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/agibot_demos/AgiBot Pyramid.mp4" type="video/mp4">
             </video>
           </div>
@@ -211,7 +211,7 @@
              data-caption="A robot arm picks up the red cube and stacks it precisely on top of the green cube. The task requires accurate depth estimation and fine-grained placement to land the cube flush on a small target surface without knocking it over."
              data-code-src="assets/sim_demos/sim_cube_stack_code.py">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/sim_demos/sim_cube_stack.mp4" type="video/mp4">
             </video>
           </div>
@@ -222,7 +222,7 @@
              data-caption="The robot navigates a cluttered tabletop — with multiple metallic bowls, a plate, and other objects — and identifies the correct black bowl to place onto the white plate. The challenge lies in semantic disambiguation among visually similar objects."
              data-code-src="assets/sim_demos/sim_pick_up_black_bowl_put_on_white_plate_code.py">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/sim_demos/sim_pick_up_black_bowl_put_on_white_plate.mp4" type="video/mp4">
             </video>
           </div>
@@ -233,7 +233,7 @@
              data-caption="A multi-step task requiring sequential reasoning: the arm first opens the drawer, then picks up the bowl and places it inside the confined space. The agent detects failure mid-execution and retries the placement autonomously."
              data-code-src="assets/sim_demos/sim_put_bowl_in_drawer_w_retry_code.py">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/sim_demos/sim_put_bowl_in_drawer_w_retry.mp4" type="video/mp4">
             </video>
           </div>
@@ -244,7 +244,7 @@
              data-caption="The robot picks up a wine bottle standing upright and inserts it into a slanted wine rack. The difficulty comes from the precise angular alignment required to slide the bottle into a narrow rack slot, and transitioning from an upright grasp to a near-horizontal insertion orientation."
              data-code-src="assets/sim_demos/sim_put_wine_bottle_on_rack_code.py">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/sim_demos/sim_put_wine_bottle_on_rack.mp4" type="video/mp4">
             </video>
           </div>
@@ -255,7 +255,7 @@
              data-caption="The robot arm sweeps across a large irregular spill with a wiping tool, making multiple passes to clean the table. The agent detects residual stain and retries coverage of missed areas, finishing with a nearly clean surface."
              data-code-src="assets/sim_demos/sim_spill_wipe_w_retry_code.py">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/sim_demos/sim_spill_wipe_w_retry.mp4" type="video/mp4">
             </video>
           </div>
@@ -266,7 +266,7 @@
              data-caption="The robot arm grips and rotates a small stove dial to activate a burner. Success is confirmed by the coil transitioning from dark grey to glowing red-orange — a dexterous fine motor control challenge requiring precise dial manipulation."
              data-code-src="assets/sim_demos/sim_turn_on_stolve_code.py">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/sim_demos/sim_turn_on_stolve.mp4" type="video/mp4">
             </video>
           </div>
@@ -277,7 +277,7 @@
              data-caption="Two robot arms coordinate to grasp and lift a large box that neither can handle alone. The task requires synchronized bimanual control — both grippers must engage simultaneously and move in sync. The agent detects an initial failed grasp and retries before completing the coordinated lift."
              data-code-src="assets/sim_demos/sim_two_arm_lift_w_retry_code.py">
           <div class="demo-video-wrap">
-            <video class="demo-video" autoplay loop muted playsinline>
+            <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/sim_demos/sim_two_arm_lift_w_retry.mp4" type="video/mp4">
             </video>
           </div>

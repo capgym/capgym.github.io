@@ -334,6 +334,18 @@ function initDemoModal() {
       wrap.appendChild(badge);
     }
 
+    // Hover: play video; leave: pause and reset to first frame
+    const video = card.querySelector(".demo-video");
+    if (video) {
+      card.addEventListener("mouseenter", () => {
+        video.play().catch(() => {});
+      });
+      card.addEventListener("mouseleave", () => {
+        video.pause();
+        video.currentTime = 0;
+      });
+    }
+
     card.addEventListener("click", () => openModal(card));
   });
 
