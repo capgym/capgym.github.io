@@ -323,11 +323,11 @@
       <div class="highlight-card">
         <div class="highlight-text">
           <div class="highlight-number">2</div>
-          <h3 class="highlight-title">Training-free CaP-Agent0 outperforms state-of-the-art VLAs on perturbed tasks</h3>
+          <h3 class="highlight-title">Training-free <span class="agent-highlight">CaP-Agent0</span> outperforms state-of-the-art VLAs on perturbed tasks</h3>
           <p class="highlight-desc">
             On LIBERO-PRO — 30 manipulation tasks with position and instruction perturbations — state-of-the-art
             Vision-Language-Action models (OpenVLA, &pi;<sub>0</sub>) score <strong>0% across the board</strong>.
-            Even the best VLA (&pi;<sub>0.5</sub>) reaches only 13% average success. CaP-Agent0, a training-free
+            Even the best VLA (&pi;<sub>0.5</sub>) reaches only 13% average success. <span class="agent-highlight">CaP-Agent0</span>, a training-free
             coding agent, achieves <strong>18% without any task-specific training</strong>, demonstrating that
             code-generation agents generalize where end-to-end learned policies break down.
           </p>
@@ -341,7 +341,7 @@
       <div class="highlight-card">
         <div class="highlight-text">
           <div class="highlight-number">3</div>
-          <h3 class="highlight-title">RL post-training on code dramatically boosts robot performance — and transfers sim-to-real</h3>
+          <h3 class="highlight-title"><span class="agent-highlight">CaP-RL</span>: Post-training on code dramatically boosts robot performance — and transfers sim-to-real</h3>
           <p class="highlight-desc">
             Using CaP-RL, we apply reinforcement learning with environment rewards directly on the coding agent.
             A 7B model (Qwen 2.5 Coder) jumps from <strong>20% to 72% average success</strong> in simulation after
@@ -359,7 +359,7 @@
       <div class="highlight-card">
         <div class="highlight-text">
           <div class="highlight-number">4</div>
-          <h3 class="highlight-title">Higher abstraction levels dramatically close the gap for smaller models</h3>
+          <h3 class="highlight-title">Higher abstraction boosts all models — and dramatically closes the gap for smaller ones</h3>
           <p class="highlight-desc">
             As API abstraction increases from raw primitives (S4) to high-level pick-and-place (S1),
             <strong>all models improve substantially</strong> — but the gains are most pronounced for
