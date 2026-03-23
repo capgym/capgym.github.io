@@ -1267,6 +1267,13 @@ a:hover {
   .highlight-card {
     grid-template-columns: 1fr;
     padding: 1.5rem;
+    overflow: hidden;
+  }
+
+  .highlight-figure {
+    min-height: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .highlight-card:nth-child(even) {
@@ -1274,7 +1281,7 @@ a:hover {
   }
 
   .sim-gallery {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 
   /* Aura blobs: shrink so they stay as two distinct blobs */
@@ -1336,12 +1343,16 @@ a:hover {
     width: 700px;
   }
 
-  /* Demo gallery: 2 columns, collapsible */
+  /* Demo gallery: single column, collapsible */
   .demo-gallery {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
-  .demo-gallery.collapsed .demo-video-card:nth-child(n+5) {
+  .demo-gallery.collapsed .demo-video-card:nth-child(n+4) {
+    display: none;
+  }
+
+  .sim-gallery.collapsed .demo-video-card:nth-child(n+4) {
     display: none;
   }
 

@@ -602,7 +602,7 @@ function initHighlightFigure4() {
   /* ---- SVG setup ---- */
   const totalH = 316;
   const margin = { top: 20, right: 16, bottom: 56, left: 20 };
-  const cw = container.clientWidth;
+  const cw = Math.max(container.clientWidth, 520);
   const width = cw - margin.left - margin.right;
   const height = totalH - margin.top - margin.bottom;
 
@@ -847,7 +847,7 @@ function initHighlightFigure2VLA() {
   /* ---- SVG setup ---- */
   const totalH = 306;
   const margin = { top: 50, right: 20, bottom: 36, left: 20 };
-  const cw = container.clientWidth;
+  const cw = Math.max(container.clientWidth, 520);
   const width = cw - margin.left - margin.right;
   const height = totalH - margin.top - margin.bottom;
 
@@ -1109,7 +1109,7 @@ function initHighlightFigure3() {
   /* ---- SVG setup ---- */
   const totalH = 300;
   const margin = { top: 20, right: 16, bottom: 46, left: 20 };
-  const cw = container.clientWidth;
+  const cw = Math.max(container.clientWidth, 520);
   const width = cw - margin.left - margin.right;
   const height = totalH - margin.top - margin.bottom;
 

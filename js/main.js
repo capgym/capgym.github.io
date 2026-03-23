@@ -399,30 +399,33 @@ function initDemoModal() {
    ========================================== */
 
 function initDemoGalleryToggle() {
-  const gallery = document.querySelector(".demo-gallery");
-  const toggle = document.getElementById("demo-gallery-toggle");
-  if (!gallery || !toggle) return;
+  const galleries = [
+    { gallery: document.querySelector(".demo-gallery"), toggle: document.getElementById("demo-gallery-toggle") },
+    { gallery: document.querySelector(".sim-gallery"),  toggle: document.getElementById("sim-gallery-toggle") },
+  ];
 
   function isMobile() {
     return window.matchMedia("(max-width: 768px)").matches;
   }
 
-  // Collapse by default on mobile
-  if (isMobile()) {
-    gallery.classList.add("collapsed");
-  }
+  galleries.forEach(({ gallery, toggle }) => {
+    if (!gallery || !toggle) return;
 
-  toggle.addEventListener("click", () => {
-    const collapsed = gallery.classList.toggle("collapsed");
-    toggle.textContent = collapsed ? "Show More" : "Show Less";
-  });
-
-  // Handle resize: add/remove collapsed
-  window.addEventListener("resize", () => {
-    if (!isMobile()) {
-      gallery.classList.remove("collapsed");
-    } else if (!gallery.classList.contains("collapsed") && toggle.textContent === "Show More") {
+    if (isMobile()) {
       gallery.classList.add("collapsed");
     }
+
+    toggle.addEventListener("click", () => {
+      const collapsed = gallery.classList.toggle("collapsed");
+      toggle.textContent = collapsed ? "Show More" : "Show Less";
+    });
+
+    window.addEventListener("resize", () => {
+      if (!isMobile()) {
+        gallery.classList.remove("collapsed");
+      } else if (!gallery.classList.contains("collapsed") && toggle.textContent === "Show More") {
+        gallery.classList.add("collapsed");
+      }
+    });
   });
 }
