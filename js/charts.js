@@ -845,8 +845,8 @@ function initHighlightFigure2VLA() {
   ];
 
   /* ---- SVG setup ---- */
-  const totalH = 290;
-  const margin = { top: 36, right: 20, bottom: 36, left: 20 };
+  const totalH = 306;
+  const margin = { top: 50, right: 20, bottom: 36, left: 20 };
   const cw = container.clientWidth;
   const width = cw - margin.left - margin.right;
   const height = totalH - margin.top - margin.bottom;
@@ -866,6 +866,14 @@ function initHighlightFigure2VLA() {
   const dividerX = leftW + 14;
   const rightX = dividerX + 14;
   const rightW = width - rightX;
+
+  /* ============ Chart title ============ */
+  g.append("text")
+    .attr("x", width / 2).attr("y", -8)
+    .attr("text-anchor", "middle")
+    .attr("font-size", "11px").attr("font-weight", "700")
+    .attr("fill", "#333").attr("letter-spacing", "0.5px")
+    .text("LIBERO-PRO (perturbed evaluation)");
 
   /* ============ LEFT PANEL: Overall averages ============ */
   const leftG = g.append("g");
