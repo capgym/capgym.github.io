@@ -14,6 +14,7 @@ const SITE_CONFIG = {
 
   // Team branding (nav bar right side)
   teamName: "NVIDIA GEAR Team",
+  teamUrl: "https://research.nvidia.com/labs/gear/",
 
   // Navigation links (set to '#' for placeholders)
   links: {

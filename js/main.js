@@ -63,7 +63,10 @@ function injectDynamicContent() {
 
   // Nav team
   const teamEl = document.getElementById("nav-team");
-  if (teamEl) teamEl.textContent = cfg.teamName;
+  if (teamEl) {
+    teamEl.textContent = cfg.teamName;
+    if (cfg.teamUrl) teamEl.href = cfg.teamUrl;
+  }
 
   // Nav links
   document.querySelectorAll("[data-link]").forEach(el => {
