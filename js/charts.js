@@ -873,7 +873,7 @@ function initHighlightFigure2VLA() {
     .attr("text-anchor", "middle")
     .attr("font-size", "11px").attr("font-weight", "700")
     .attr("fill", "#333").attr("letter-spacing", "0.5px")
-    .text("LIBERO-PRO (perturbed evaluation)");
+    .text("LIBERO-PRO (Object, Goal, Spatial — perturbed evaluation)");
 
   /* ============ LEFT PANEL: Overall averages ============ */
   const leftG = g.append("g");
