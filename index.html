@@ -283,6 +283,16 @@
           </div>
           <span class="demo-video-label">Bimanual Coordination</span>
         </div>
+
+        <div class="demo-video-card fade-in"
+             data-caption="Two robot arms coordinate a handover: the left arm picks up the hammer and passes it to the right arm, which receives and grasps it. The task requires precise bimanual timing and spatial coordination for a smooth tool transfer.">
+          <div class="demo-video-wrap">
+            <video class="demo-video" loop muted playsinline preload="metadata">
+              <source src="assets/sim_demos/sim_pass_hammer.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="demo-video-label">Bimanual Handover</span>
+        </div>
       </div>
     </div>
   </section>
@@ -349,13 +359,14 @@
       <div class="highlight-card">
         <div class="highlight-text">
           <div class="highlight-number">4</div>
-          <h3 class="highlight-title">High-level abstractions boost success — but mask low-level reasoning failures</h3>
+          <h3 class="highlight-title">Higher abstraction levels dramatically close the gap for smaller models</h3>
           <p class="highlight-desc">
-            Task success rises monotonically as API abstraction increases from raw primitives (S4) to
-            high-level pick-and-place (S1). Yet code compilation stays high even at the lowest level —
-            revealing that the bottleneck is <strong>physical reasoning, not code correctness</strong>.
-            This motivates evaluating agents on <strong>primitive-level performance</strong>, where success
-            requires genuine spatial and control reasoning rather than relying on human-designed abstractions.
+            As API abstraction increases from raw primitives (S4) to high-level pick-and-place (S1),
+            <strong>all models improve substantially</strong> — but the gains are most pronounced for
+            weaker and open-source models, whose compilation rates collapse at low abstraction levels.
+            This suggests a promising path: pair a <strong>lightweight LM for high-level planning</strong>
+            with a visual-motor policy (e.g., a VLA) that handles low-level control, letting even
+            smaller models achieve strong task performance through the right division of labor.
           </p>
         </div>
         <div class="highlight-figure" id="highlight-fig-4">
