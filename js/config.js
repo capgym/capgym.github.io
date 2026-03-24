@@ -18,7 +18,7 @@ const SITE_CONFIG = {
 
   // Navigation links (set to '#' for placeholders)
   links: {
-    arxiv: "#",
+    arxiv: "assets/capgym_icml26.pdf",
     code: "#",
     playground: "#",
   },
