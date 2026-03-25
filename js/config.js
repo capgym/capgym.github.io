@@ -18,7 +18,7 @@ const SITE_CONFIG = {
 
   // Navigation links (set to '#' for placeholders)
   links: {
-    arxiv: "https://arxiv.org/pdf/2603.22435",
+    arxiv: "https://arxiv.org/abs/2603.22435",
     code: "https://github.com/capgym/cap-x",
     playground: "#",
   },
