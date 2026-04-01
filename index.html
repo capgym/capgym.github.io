@@ -290,7 +290,8 @@
         </div>
 
         <div class="demo-video-card fade-in"
-             data-caption="Two robot arms coordinate a handover: the left arm picks up the hammer and passes it to the right arm, which receives and grasps it. The task requires precise bimanual timing and spatial coordination for a smooth tool transfer.">
+             data-caption="Two robot arms coordinate a handover: the left arm picks up the hammer and passes it to the right arm, which receives and grasps it. The task requires precise bimanual timing and spatial coordination for a smooth tool transfer."
+             data-code-src="assets/sim_demos/sim_pass_hammer_code.py">
           <div class="demo-video-wrap">
             <video class="demo-video" loop muted playsinline preload="metadata">
               <source src="assets/sim_demos/sim_pass_hammer.mp4" type="video/mp4">
@@ -300,7 +301,7 @@
         </div>
 
         <div class="demo-video-card fade-in"
-             data-caption="The agent picks up a square nut by its handle, reasons about the spatial offset between the handle and the hollow center, and precisely aligns the nut's hole onto a peg — demonstrating dexterous pick-and-insert with geometric offset reasoning."
+             data-caption="The agent picks up a square nut and attempts to insert it onto a peg. After the first attempt fails, it detects the misalignment through visual differencing and autonomously retries — demonstrating multi-turn self-verification and closed-loop error recovery."
              data-code-src="assets/sim_demos/sim_peg_insertion_code.py">
           <div class="demo-video-wrap">
             <video class="demo-video" loop muted playsinline preload="metadata">
